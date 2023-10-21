@@ -1,1 +1,2 @@
-# FromTheWastes
+From the Wastes
+Разработчик - Пугач Владислав Олегович
