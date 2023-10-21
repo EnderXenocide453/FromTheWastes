@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tester : MonoBehaviour
+public class ResourceArea : MonoBehaviour
 {
-    #if UNITY_EDITOR
     
-    #endif
 }
