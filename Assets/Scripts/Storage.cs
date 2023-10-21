@@ -52,14 +52,6 @@ public class Storage : MonoBehaviour
         onCountChanged += CheckCount;
     }
 
-    public int GetResourceCount(ResourceType type)
-    {
-        if (_resources.ContainsKey(type))
-            return _resources[type];
-
-        return 0;
-    }
-
     /// <summary>
     /// Отправляет ресурс type в хранилище other в количестве count
     /// </summary>
@@ -82,6 +74,21 @@ public class Storage : MonoBehaviour
 
         //Отправка ресурсов и изменение количества собстенных ресурсов на принятое хранилищем-адресатом
         ChangeResource(type, -other.ChangeResource(type, sendCount));
+    }
+
+    public ResourceType[] FindIdentity(Storage other)
+    {
+        (ResourceType[] min, ResourceType[] max) = resouceTypes.Length > other.resouceTypes.Length ? (other.resouceTypes, resouceTypes) : (resouceTypes, other.resouceTypes);
+
+        List<ResourceType> types = new List<ResourceType>();
+        foreach (var type in min) {
+            for (int i = 0; i < max.Length; i++) {
+                if (type == max[i])
+                    types.Add(type);
+            }
+        }
+
+        return types.ToArray();
     }
 
     /// <summary>

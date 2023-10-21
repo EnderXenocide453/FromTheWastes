@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Storage))]
 public class Carrier : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Storage storage { get; private set; }
+
     void Start()
     {
-        
+        storage = GetComponent<Storage>();
     }
 
     // Update is called once per frame
