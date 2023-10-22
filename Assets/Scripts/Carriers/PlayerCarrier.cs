@@ -6,8 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCarrier : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 1;
-    [SerializeField] private float rotationSpeed = 1;
+    [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float acceleration = 2f;
+    [SerializeField] private float rotationSpeed = 10;
 
     private Quaternion _targetRotation;
 
@@ -38,8 +39,16 @@ public class PlayerCarrier : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _body.AddForce(_moveDir * moveSpeed);
+        Move();
         Rotate();
+    }
+
+    private void Move()
+    {
+        Vector3 velocity = new Vector3(_body.velocity.x, 0, _body.velocity.z);
+        velocity = Vector3.MoveTowards(velocity, _moveDir * moveSpeed, acceleration);
+
+        _body.velocity = new Vector3(velocity.x, _body.velocity.y, velocity.z);
     }
 
     private void Rotate()
