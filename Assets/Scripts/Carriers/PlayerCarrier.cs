@@ -34,7 +34,7 @@ public class PlayerCarrier : MonoBehaviour
         _moveDir = _valuesHandler.GetAxis().normalized;
 
         if (_moveDir.magnitude != 0)
-            _targetRotation = Quaternion.LookRotation(_moveDir);
+            _targetRotation = Quaternion.LookRotation(_body.velocity);
     }
 
     private void FixedUpdate()
