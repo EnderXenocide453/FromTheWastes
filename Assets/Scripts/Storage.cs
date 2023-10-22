@@ -27,7 +27,7 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Общее количество хранимых ресурсов
     /// </summary>
-    private int _count = 0;
+    [SerializeField]private int _count = 0;
 
     /// <summary>
     /// Делегат для событий хранилища
@@ -60,17 +60,17 @@ public class Storage : MonoBehaviour
     /// <param name="sendCount">Количество отправляемого ресурса. Должно быть больше 0</param>
     public void SendResource(Storage other, ResourceType type, int sendCount = 1)
     {
-        //Если количество меньше 1, отправка невозможна
-        if (sendCount < 1) 
-            return;
         //Проверка возможности обращения к ресурсу
         if (!_resources.ContainsKey(type))
             return;
 
-        //Если ресурс не бесконечен и есть в хранилище
-        if (_resources[type] > 0 && !endless)
-            //Ограничение отправляемого количества пределами от 1 до количества ресурсов в хранилище
-            sendCount = Mathf.Clamp(sendCount, 1, _resources[type]);
+        //Если ресурсы бесконечны, оставляем количество без изменений.
+        //Иначе, если ресурс есть в хранилище, ограничиваем его максимальным значением. Если ресурса нет, отправка не осуществляется
+        sendCount = endless ? sendCount : (_resources[type] > 0 ? Mathf.Clamp(sendCount, 1, _resources[type]) : 0);
+
+        //Если количество меньше 1, отправка невозможна
+        if (sendCount < 1) 
+            return;
 
         //Отправка ресурсов и изменение количества собстенных ресурсов на принятое хранилищем-адресатом
         ChangeResource(type, -other.ChangeResource(type, sendCount));
@@ -173,5 +173,21 @@ public class Storage : MonoBehaviour
 
         //Если выхода за рамки не последовало, возвращаем число неизменным
         return count;
+    }
+}
+
+public static class GlobalResourceTransporter
+{
+    public static IEnumerator TransportResource(Storage from, Storage to, float delay)
+    {
+        ResourceType[] types = from.FindIdentity(to);
+
+        while (true) {
+            foreach (var type in types) {
+                from.SendResource(to, type);
+            }
+
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

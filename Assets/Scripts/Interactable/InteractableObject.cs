@@ -31,11 +31,11 @@ public abstract class InteractableObject : MonoBehaviour
     /// <summary>
     /// Вызывается при нажатии игроком кнопки взаимодействия в триггере объекта
     /// </summary>
-    protected abstract void StartInteract(Carrier carrier = null);
+    public abstract void StartInteract(Carrier carrier = null);
     /// <summary>
     /// Вызывается при отпускании игроком кнопки взаимодействия или при выходе из триггера
     /// </summary>
-    protected abstract void StopInteract(Carrier carrier = null);
+    public abstract void StopInteract(Carrier carrier = null);
 
     /// <summary>
     /// Устанавливает значение _interactable равным active, при необходимости завершает взаимодействие
@@ -43,6 +43,12 @@ public abstract class InteractableObject : MonoBehaviour
     /// <param name="active"></param>
     protected void ShowDescription(bool active)
     {
-        //Через аниматор открываем или закрываем описание
+        if (!descriptionAnim) {
+            Debug.Log("Анимация описания не задана");
+            return;
+        }
+
+        descriptionAnim.SetBool("Show", active);
+        descriptionAnim.speed = 1;
     }
 }

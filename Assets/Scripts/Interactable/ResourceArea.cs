@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Зона приема/выдачи ресурсов. Осуществляет взаимодействие с носильщиками и хранилищем
+/// </summary>
 [RequireComponent(typeof(Storage))]
 public class ResourceArea : InteractableObject
 {
@@ -24,34 +27,25 @@ public class ResourceArea : InteractableObject
         storage = GetComponent<Storage>();
     }
 
-    protected override void StartInteract(Carrier carrier = null)
+    public override void StartInteract(Carrier carrier = null)
     {
         if (!carrier) return;
         
         if (isImport)
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(CarryResource(carrier.storage, storage)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(carrier.storage, storage, delay)));
         else
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(CarryResource(storage, carrier.storage)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(storage, carrier.storage, delay)));
     }
 
-    protected override void StopInteract(Carrier carrier = null)
+    public override void StopInteract(Carrier carrier = null)
     {
         if (!carrier) return;
 
-        StopCoroutine(_coroutines[carrier.GetInstanceID()]);
-        _coroutines.Remove(carrier.GetInstanceID());
-    }
+        int id = carrier.GetInstanceID();
 
-    private IEnumerator CarryResource(Storage from, Storage to)
-    {
-        ResourceType[] types = from.FindIdentity(to);
+        if (!_coroutines.ContainsKey(id)) return;
 
-        while (true) {
-            foreach (var type in types) {
-                from.SendResource(to, type);
-            }
-
-            yield return new WaitForSeconds(delay);
-        }
+        StopCoroutine(_coroutines[id]);
+        _coroutines.Remove(id);
     }
 }
