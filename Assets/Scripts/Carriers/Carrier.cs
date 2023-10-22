@@ -19,14 +19,15 @@ public class Carrier : MonoBehaviour
     {
         _nearInteractables = new Dictionary<int, InteractableObject>();
         storage = GetComponent<Storage>();
-
-        onEnterInteractable += Interact;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.attachedRigidbody)
+            return;
+
         if (((1 << other.gameObject.layer) & interactableMask.value) > 0) {
-            if (!other.TryGetComponent<InteractableObject>(out var obj)) return;
+            if (!other.attachedRigidbody.TryGetComponent<InteractableObject>(out var obj)) return;
 
             AddInteractable(obj);
         }
@@ -34,10 +35,13 @@ public class Carrier : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        RemoveInteractable(other.gameObject.GetInstanceID());
+        if (!other.attachedRigidbody)
+            return;
+
+        RemoveInteractable(other.attachedRigidbody.gameObject.GetInstanceID());
     }
 
-    public void Interact()
+    public void StartInteract()
     {
         if (_nearInteractables.Count == 0) return;
 
