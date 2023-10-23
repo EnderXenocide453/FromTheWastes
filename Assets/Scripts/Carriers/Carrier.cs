@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Storage))]
-public class Carrier : MonoBehaviour
+public abstract class Carrier : MonoBehaviour
 {
     public Storage storage { get; private set; }
+    public float workSpeed = 5;
     [SerializeField] private LayerMask interactableMask;
+    [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float acceleration = 2f;
+    [SerializeField] private float rotationSpeed = 10;
 
+    protected Quaternion targetRotation;
+    protected Vector3 moveDir;
+    protected GlobalValuesHandler valuesHandler;
+
+    private Rigidbody _body;
     private Dictionary<int, InteractableObject> _nearInteractables;
 
     public delegate void CarrierHandler();
@@ -15,10 +24,27 @@ public class Carrier : MonoBehaviour
     public event CarrierHandler onExitInteractable;
     public event CarrierHandler onExitAllInteractables;
 
-    private void Start()
+    private void Awake()
     {
-        _nearInteractables = new Dictionary<int, InteractableObject>();
         storage = GetComponent<Storage>();
+        valuesHandler = GameObject.FindWithTag("Global")?.GetComponent<GlobalValuesHandler>();
+        _body = GetComponent<Rigidbody>();
+
+        _nearInteractables = new Dictionary<int, InteractableObject>();
+    }
+
+    private void Update()
+    {
+        GetDirection();
+
+        if (moveDir.magnitude != 0)
+            targetRotation = Quaternion.LookRotation(_body.velocity);
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+        Rotate();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,7 +67,7 @@ public class Carrier : MonoBehaviour
         RemoveInteractable(other.attachedRigidbody.gameObject.GetInstanceID());
     }
 
-    public void StartInteract()
+    protected void StartInteract()
     {
         if (_nearInteractables.Count == 0) return;
 
@@ -50,13 +76,29 @@ public class Carrier : MonoBehaviour
         }
     }
 
-    public void StopInteract()
+    protected void StopInteract()
     {
         if (_nearInteractables.Count == 0) return;
 
         foreach (var id in _nearInteractables.Keys) {
             StopInteractWith(id);
         }
+    }
+
+    protected abstract void GetDirection();
+
+    private void Move()
+    {
+        Vector3 velocity = new Vector3(_body.velocity.x, 0, _body.velocity.z);
+        velocity = Vector3.MoveTowards(velocity, moveDir * moveSpeed, acceleration);
+
+        _body.velocity = new Vector3(velocity.x, _body.velocity.y, velocity.z);
+    }
+
+    private void Rotate()
+    {
+        //transform.Rotate(Vector3.MoveTowards(transform.rotation.eulerAngles, _targetRotation, rotationSpeed));
+        _body.MoveRotation(Quaternion.RotateTowards(_body.rotation, targetRotation, rotationSpeed));
     }
 
     private void AddInteractable(InteractableObject obj)

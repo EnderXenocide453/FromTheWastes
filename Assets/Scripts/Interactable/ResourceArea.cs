@@ -32,9 +32,9 @@ public class ResourceArea : InteractableObject
         if (!carrier) return;
         
         if (isImport)
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(carrier.storage, storage, delay)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(carrier.storage, storage, 1 / carrier.workSpeed)));
         else
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(storage, carrier.storage, delay)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(storage, carrier.storage, 1 / carrier.workSpeed)));
     }
 
     public override void StopInteract(Carrier carrier = null)
