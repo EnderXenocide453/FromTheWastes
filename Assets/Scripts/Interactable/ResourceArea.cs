@@ -14,6 +14,7 @@ public class ResourceArea : InteractableObject
     public Storage storage { get; private set; }
 
     [SerializeField] private bool isImport = true;
+    [SerializeField] private float workAmount = 1;
 
     /// <summary>
     /// Корутины, размещенные относительно id вызвавшего их носильщика
@@ -31,9 +32,9 @@ public class ResourceArea : InteractableObject
         if (!carrier) return;
         
         if (isImport)
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(carrier.storage, storage, 1 / carrier.workSpeed)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(TransportResource(carrier.storage, storage, workAmount / carrier.workSpeed)));
         else
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(GlobalResourceTransporter.TransportResource(storage, carrier.storage, 1 / carrier.workSpeed)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(TransportResource(storage, carrier.storage, workAmount / carrier.workSpeed)));
     }
 
     public override void StopInteract(Carrier carrier = null)
@@ -46,5 +47,18 @@ public class ResourceArea : InteractableObject
 
         StopCoroutine(_coroutines[id]);
         _coroutines.Remove(id);
+    }
+
+    public IEnumerator TransportResource(Storage from, Storage to, float delay)
+    {
+        ResourceType[] types = from.FindIdentity(to);
+
+        while (true) {
+            foreach (var type in types) {
+                from.SendResource(to, type);
+            }
+
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

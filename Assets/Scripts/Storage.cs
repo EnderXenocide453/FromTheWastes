@@ -10,7 +10,7 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Типы хранимых ресурсов
     /// </summary>
-    [SerializeField] private ResourceType[] resouceTypes;
+    [SerializeField] private ResourceType[] resourceTypes;
     /// <summary>
     /// Объем хранилища
     /// </summary>
@@ -21,18 +21,18 @@ public class Storage : MonoBehaviour
     [SerializeField] private bool endless;
 
     /// <summary>
-    /// Ресурсы в хранилище и их количество
+    /// Ресурсы в хранилище
     /// </summary>
     private Dictionary<ResourceType, Resource> _resources;
     /// <summary>
     /// Общее количество хранимых ресурсов
     /// </summary>
-    [SerializeField]private int _count = 0;
+    private int _count = 0;
 
     /// <summary>
     /// Делегат для событий хранилища
     /// </summary>
-    public delegate void StorageEventHandler();
+    public delegate void StorageEventHandler(object obj);
     /// <summary>
     /// Событие изменения количества ресурсов
     /// </summary>
@@ -76,9 +76,27 @@ public class Storage : MonoBehaviour
         ChangeResource(type, -other.ChangeResource(type, sendCount));
     }
 
+    public int GetCount() => _count;
+
+    public int GetResourceCount(ResourceType type)
+    {
+        if (_resources.TryGetValue(type, out var res))
+            return res.count;
+
+        return 0;
+    }
+
+    public ResourceType[] GetResourceTypes()
+    {
+        ResourceType[] res = new ResourceType[resourceTypes.Length];
+        resourceTypes.CopyTo(res, 0);
+
+        return res;
+    }
+
     public ResourceType[] FindIdentity(Storage other)
     {
-        (ResourceType[] min, ResourceType[] max) = resouceTypes.Length > other.resouceTypes.Length ? (other.resouceTypes, resouceTypes) : (resouceTypes, other.resouceTypes);
+        (ResourceType[] min, ResourceType[] max) = resourceTypes.Length > other.resourceTypes.Length ? (other.resourceTypes, resourceTypes) : (resourceTypes, other.resourceTypes);
 
         List<ResourceType> types = new List<ResourceType>();
         foreach (var type in min) {
@@ -98,12 +116,12 @@ public class Storage : MonoBehaviour
     {
         _resources = new Dictionary<ResourceType, Resource>();
 
-        if (resouceTypes == null || resouceTypes.Length == 0) {
+        if (resourceTypes == null || resourceTypes.Length == 0) {
             Debug.Log($"Не заполнен массив ресурсов в хранилище объекта {gameObject.name}");
             return;
         }
 
-        foreach (var type in resouceTypes)
+        foreach (var type in resourceTypes)
             if (!_resources.TryAdd(type, ResourcesCollection.GetResource(type)))
                 Debug.Log($"Ресурс типа {_resources[type].name} уже назначен в хранилище объекта {gameObject.name}");
     }
@@ -111,12 +129,12 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Проверка количества для вызова событий
     /// </summary>
-    private void CheckCount()
+    private void CheckCount(object obj)
     {
         if (_count == capacity)
-            onStorageFilled?.Invoke();
+            onStorageFilled?.Invoke(obj);
         else if (_count == 0)
-            onStorageEmptied?.Invoke();
+            onStorageEmptied?.Invoke(obj);
     }
 
     /// <summary>
@@ -128,7 +146,7 @@ public class Storage : MonoBehaviour
     private int ChangeResource(ResourceType type, int count)
     {
         //Если ресурс бесконечен, возвращаем число без изменений
-        if (endless) return 0;
+        if (endless) return count;
 
         int verified = VerifyResourceChange(type, count);
 
@@ -139,9 +157,9 @@ public class Storage : MonoBehaviour
         _count += verified;
         _resources[type].count += verified;
 
-        onCountChanged?.Invoke();
+        onCountChanged?.Invoke((type, verified));
 
-        Debug.Log($"Количество ресурса {type} теперь равно {_resources[type].count}");
+        Debug.Log($"Количество ресурса {_resources[type].name} теперь равно {_resources[type].count}");
 
         return verified;
     }
@@ -173,21 +191,5 @@ public class Storage : MonoBehaviour
 
         //Если выхода за рамки не последовало, возвращаем число неизменным
         return count;
-    }
-}
-
-public static class GlobalResourceTransporter
-{
-    public static IEnumerator TransportResource(Storage from, Storage to, float delay)
-    {
-        ResourceType[] types = from.FindIdentity(to);
-
-        while (true) {
-            foreach (var type in types) {
-                from.SendResource(to, type);
-            }
-
-            yield return new WaitForSeconds(delay);
-        }
     }
 }

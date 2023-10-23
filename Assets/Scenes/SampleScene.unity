@@ -170,7 +170,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!136 &13811121
 CapsuleCollider:
@@ -273,10 +273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9869cd755a5a8ae46b55ffc3c01f92ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resouceTypes: 000000000100000002000000030000000400000005000000
+  resourceTypes: 00000000
   capacity: 15
   endless: 0
-  _count: 0
 --- !u!114 &13811127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +335,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
+      propertyPath: resourceTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3169679574766318454, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_Name
       value: ResourceArea (1)
@@ -826,15 +829,15 @@ MonoBehaviour:
   resources:
   - type: 0
     prefabPath: Prefabs/Cube.prefab
-    name: unknown
+    name: "\u041E\u0442\u0445\u043E\u0434\u044B"
     count: 0
   - type: 1
     prefabPath: Prefabs/Cube.prefab
-    name: unknown
+    name: "\u041C\u0443\u0441\u043E\u0440"
     count: 0
   - type: 2
     prefabPath: Prefabs/Cube.prefab
-    name: unknown
+    name: "\u041F\u043E\u043B\u0435\u0437\u043D\u044B\u0439 \u0445\u043B\u0430\u043C"
     count: 0
   - type: 3
     prefabPath: Prefabs/Cube.prefab
@@ -1024,10 +1027,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9869cd755a5a8ae46b55ffc3c01f92ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resouceTypes: 00000000
+  resourceTypes: 00000000
   capacity: 10
   endless: 0
-  _count: 0
 --- !u!54 &1877129054
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1169,6 +1171,10 @@ PrefabInstance:
     - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: capacity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
+      propertyPath: resourceTypes.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3169679574766318454, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_Name

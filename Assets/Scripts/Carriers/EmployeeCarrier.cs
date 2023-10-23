@@ -29,7 +29,7 @@ public class EmployeeCarrier : Carrier
         StartInteract();
     }
 
-    private void FinishWork()
+    private void FinishWork(object obj)
     {
         _stop = false;
         (areaA, areaB) = (areaB, areaA);
