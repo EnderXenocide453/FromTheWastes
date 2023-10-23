@@ -23,7 +23,7 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Ресурсы в хранилище и их количество
     /// </summary>
-    private Dictionary<ResourceType, int> _resources;
+    private Dictionary<ResourceType, Resource> _resources;
     /// <summary>
     /// Общее количество хранимых ресурсов
     /// </summary>
@@ -66,7 +66,7 @@ public class Storage : MonoBehaviour
 
         //Если ресурсы бесконечны, оставляем количество без изменений.
         //Иначе, если ресурс есть в хранилище, ограничиваем его максимальным значением. Если ресурса нет, отправка не осуществляется
-        sendCount = endless ? sendCount : (_resources[type] > 0 ? Mathf.Clamp(sendCount, 1, _resources[type]) : 0);
+        sendCount = endless ? sendCount : (_resources[type].count > 0 ? Mathf.Clamp(sendCount, 1, _resources[type].count) : 0);
 
         //Если количество меньше 1, отправка невозможна
         if (sendCount < 1) 
@@ -96,7 +96,7 @@ public class Storage : MonoBehaviour
     /// </summary>
     private void InitStorage()
     {
-        _resources = new Dictionary<ResourceType, int>();
+        _resources = new Dictionary<ResourceType, Resource>();
 
         if (resouceTypes == null || resouceTypes.Length == 0) {
             Debug.Log($"Не заполнен массив ресурсов в хранилище объекта {gameObject.name}");
@@ -104,8 +104,8 @@ public class Storage : MonoBehaviour
         }
 
         foreach (var type in resouceTypes)
-            if (!_resources.TryAdd(type, 0))
-                Debug.Log($"Ресурс типа {type} уже назначен в хранилище объекта {gameObject.name}");
+            if (!_resources.TryAdd(type, ResourcesCollection.GetResource(type)))
+                Debug.Log($"Ресурс типа {_resources[type].name} уже назначен в хранилище объекта {gameObject.name}");
     }
 
     /// <summary>
@@ -137,11 +137,11 @@ public class Storage : MonoBehaviour
             return 0;
 
         _count += verified;
-        _resources[type] += verified;
+        _resources[type].count += verified;
 
         onCountChanged?.Invoke();
 
-        Debug.Log($"Количество ресурса {type} теперь равно {_resources[type]}");
+        Debug.Log($"Количество ресурса {type} теперь равно {_resources[type].count}");
 
         return verified;
     }
@@ -167,8 +167,8 @@ public class Storage : MonoBehaviour
         }
 
         //Если при добавлении числа к количеству ресурса оно станет отрицательным, возвращаем отрицательное количество ресурса
-        if (_resources[type] + count < 0) {
-            return -_resources[type];
+        if (_resources[type].count + count < 0) {
+            return -_resources[type].count;
         }
 
         //Если выхода за рамки не последовало, возвращаем число неизменным

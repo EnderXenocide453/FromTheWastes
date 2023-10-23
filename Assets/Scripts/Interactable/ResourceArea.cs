@@ -14,7 +14,6 @@ public class ResourceArea : InteractableObject
     public Storage storage { get; private set; }
 
     [SerializeField] private bool isImport = true;
-    [SerializeField] private float delay = 0.5f;
 
     /// <summary>
     /// Корутины, размещенные относительно id вызвавшего их носильщика

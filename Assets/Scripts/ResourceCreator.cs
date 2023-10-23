@@ -31,8 +31,34 @@ public class ResourceCreator : MonoBehaviour
 [System.Serializable]
 public class Resource
 {
-    public ResourceType type;
-    public string prefabPath;
+    public ResourceType type = ResourceType.Waste;
+    public string prefabPath = "Prefabs/default.prefab";
+    public string name = "unknown";
+    public int count = 0;
+
+    public Resource()
+    {
+        type = ResourceType.Waste;
+        prefabPath = "Prefabs/default.prefab";
+        name = "unknown";
+        count = 0;
+    }
+
+    public Resource(Resource copy)
+    {
+        type = copy.type;
+        prefabPath = copy.prefabPath;
+        name = copy.name;
+        count = copy.count;
+    }
+
+    public Resource(ResourceType type, string prefabPath, string name, int count)
+    {
+        this.type = type;
+        this.prefabPath = prefabPath;
+        this.name = name;
+        this.count = count;
+    }
 }
 
 /// <summary>
@@ -56,7 +82,7 @@ public static class ResourcesCollection
     /// <summary>
     /// Словарь с экземплярами ресурсов
     /// </summary>
-    public static Dictionary<ResourceType, Resource> resources { get; private set; }
+    private static Dictionary<ResourceType, Resource> _resources;
 
     /// <summary>
     /// Метод заполнения словаря ресурсов
@@ -64,11 +90,19 @@ public static class ResourcesCollection
     /// <param name="resArray">Массив ресурсов</param>
     public static void FillCollection(Resource[] resArray)
     {
-        resources = new Dictionary<ResourceType, Resource>();
+        _resources = new Dictionary<ResourceType, Resource>();
 
         foreach (var res in resArray) {
-            if (!resources.TryAdd(res.type, res))
+            if (!_resources.TryAdd(res.type, new Resource(res)))
                 Debug.Log($"Ресурс {res.type} уже существует!");
         }
+    }
+
+    public static Resource GetResource(ResourceType type)
+    {
+        if (!_resources.ContainsKey(type))
+            return new Resource();
+
+        return new Resource(_resources[type]);
     }
 }
