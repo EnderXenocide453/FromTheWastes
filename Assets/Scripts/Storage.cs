@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class Storage : MonoBehaviour
 {
+    public bool filled { get; private set; }
+
     /// <summary>
     /// Типы хранимых ресурсов
     /// </summary>
@@ -58,11 +60,12 @@ public class Storage : MonoBehaviour
     /// <param name="other">Хранилище-адресат</param>
     /// <param name="type">Тип отправляемого ресурса</param>
     /// <param name="sendCount">Количество отправляемого ресурса. Должно быть больше 0</param>
-    public void SendResource(Storage other, ResourceType type, int sendCount = 1)
+    /// /// <returns>Количество отправленного ресурса</return
+    public int SendResource(Storage other, ResourceType type, int sendCount = 1)
     {
         //Проверка возможности обращения к ресурсу
         if (!_resources.ContainsKey(type))
-            return;
+            return 0;
 
         //Если ресурсы бесконечны, оставляем количество без изменений.
         //Иначе, если ресурс есть в хранилище, ограничиваем его максимальным значением. Если ресурса нет, отправка не осуществляется
@@ -70,10 +73,10 @@ public class Storage : MonoBehaviour
 
         //Если количество меньше 1, отправка невозможна
         if (sendCount < 1) 
-            return;
+            return 0;
 
         //Отправка ресурсов и изменение количества собстенных ресурсов на принятое хранилищем-адресатом
-        ChangeResource(type, -other.ChangeResource(type, sendCount));
+        return -ChangeResource(type, -other.ChangeResource(type, sendCount));
     }
 
     public int GetCount() => _count;
@@ -129,10 +132,13 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Проверка количества для вызова событий
     /// </summary>
-    private void CheckCount(object obj)
+    private void CheckCount(object obj = null)
     {
-        if (_count == capacity)
+        filled = false;
+        if (_count == capacity) {
+            filled = true;
             onStorageFilled?.Invoke(obj);
+        }
         else if (_count == 0)
             onStorageEmptied?.Invoke(obj);
     }

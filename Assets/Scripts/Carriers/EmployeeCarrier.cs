@@ -13,8 +13,8 @@ public class EmployeeCarrier : Carrier
     {
         onEnterInteractable += StartWork;
 
-        storage.onStorageFilled += FinishWork;
-        storage.onStorageEmptied += FinishWork;
+        storage.onStorageFilled += (object obj) => FinishWork();
+        storage.onStorageEmptied += (object obj) => FinishWork();
     }
 
     protected override void GetDirection()
@@ -29,7 +29,7 @@ public class EmployeeCarrier : Carrier
         StartInteract();
     }
 
-    private void FinishWork(object obj)
+    private void FinishWork()
     {
         _stop = false;
         (areaA, areaB) = (areaB, areaA);
