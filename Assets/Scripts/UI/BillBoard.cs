@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BillBoard : MonoBehaviour
 {
-    void Update()
+    private void Update()
     {
         LookAtCamera();
     }
 
     private void LookAtCamera()
     {
-        Vector3 target = Camera.main.transform.position - transform.position;
-        target = -target;
+        Vector3 target = transform.position + transform.position - Camera.main.transform.position;
         target.x = transform.position.x;
 
         transform.LookAt(target);

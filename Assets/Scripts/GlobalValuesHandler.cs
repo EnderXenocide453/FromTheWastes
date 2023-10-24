@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GlobalValuesHandler : MonoBehaviour
@@ -8,6 +6,16 @@ public class GlobalValuesHandler : MonoBehaviour
     public const string VertAxis = "Vertical";
 
     public KeyCode interactKey = KeyCode.E;
+
+    private int _cash;
+
+    [SerializeField] private TMPro.TMP_Text cashCounter;
+
+    public delegate void KeyHandler();
+
+    public event KeyHandler onInteractKeyDown;
+
+    public event KeyHandler onInteractKeyUp;
 
     public int Cash
     {
@@ -21,22 +29,13 @@ public class GlobalValuesHandler : MonoBehaviour
             cashCounter.text = $"{_cash}";
         }
     }
+    public Vector3 GetAxis() => new Vector3(Input.GetAxis(HorAxis), 0, Input.GetAxis(VertAxis));
 
-    [SerializeField] private TMPro.TMP_Text cashCounter;
-
-    private int _cash;
-
-    public delegate void KeyHandler();
-    public event KeyHandler onInteractKeyDown;
-    public event KeyHandler onInteractKeyUp;
-
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(interactKey))
             onInteractKeyDown?.Invoke();
         else if (Input.GetKeyUp(interactKey))
             onInteractKeyUp?.Invoke();
     }
-
-    public Vector3 GetAxis() => new Vector3(Input.GetAxis(HorAxis), 0, Input.GetAxis(VertAxis));
 }

@@ -1,17 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Storage))]
 public class Store : MonoBehaviour
 {
+    private GlobalValuesHandler _globalValues;
+    private Dictionary<ResourceType, int> _priceList;
+    private Storage _storeStorage;
     [SerializeField] private Storage importStorage;
     [SerializeField] private Converter.ConvertInfo[] priceList;
-
-    private Storage _storeStorage;
-    private Dictionary<ResourceType, int> _priceList;
-    private GlobalValuesHandler _globalValues;
-
     private void Awake()
     {
         Init();

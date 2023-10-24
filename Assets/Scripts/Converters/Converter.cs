@@ -1,20 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Storage))]
 public class Converter : MonoBehaviour
 {
     [SerializeField] private string converterName = "Без имени";
+    [SerializeField] private float workAmount = 1;
+    [SerializeField] private float workSpeed = 1;
     [SerializeField] private Storage[] importStorages;
     [SerializeField] private Storage[] exportStorages;
     [SerializeField] private ConvertInfo[] convertCost;
     [SerializeField] private ConvertInfo[] convertResult;
-    [SerializeField] private float workAmount = 1;
-    [SerializeField] private float workSpeed = 1;
+    [SerializeField] private CommonUpgrade commonUpgrade;
+    [SerializeField] private TierUpgrade[] tierUpgrades;
+
+    [SerializeField] private Image progressBar;
+
+    private float _workProgress;
+
+    private float _workSpeedMultiplier = 1;
+    private float _capacityMultiplier = 1;
+    private int _level = 0;
+    private int _tier = 0;
 
     private Storage _converterStorage;
-    private float _workProgress;
 
     private Dictionary<ResourceType, int> _readyResources;
 
@@ -25,6 +36,7 @@ public class Converter : MonoBehaviour
     public event ConverterHandler onConvertEnds;
     public event ConverterHandler onConvertStart;
     public event ConverterHandler onConverterReady;
+    public event ConverterHandler onMaxLevelReached;
 
     private void Start()
     {
@@ -36,6 +48,42 @@ public class Converter : MonoBehaviour
     {
         if (_started)
             Convert(Time.fixedDeltaTime);
+
+        UpgradeTier();
+    }
+
+    public void Upgrade()
+    {
+        if (_level >= commonUpgrade.maxLevel)
+            return;
+
+        _level++;
+
+        _workSpeedMultiplier += commonUpgrade.workSpeedMultiplier;
+        _capacityMultiplier += commonUpgrade.storageCapacityMultiplier;
+
+        foreach (var storage in importStorages)
+            storage.SetCapacityMultiplier(_capacityMultiplier);
+        foreach (var storage in exportStorages)
+            storage.SetCapacityMultiplier(_capacityMultiplier);
+
+        if (_level == commonUpgrade.maxLevel)
+            onMaxLevelReached?.Invoke();
+    }
+
+    public void UpgradeTier()
+    {
+        if (tierUpgrades == null || _tier >= tierUpgrades.Length)
+            return;
+
+        TierUpgrade tier = tierUpgrades[_tier];
+
+        tier.EnableTierParts();
+
+        convertCost = tier.tierConvertCost;
+        convertResult = tier.tierConvertResult;
+
+        _tier++;
     }
 
     private void ValidateResources()
@@ -137,7 +185,7 @@ public class Converter : MonoBehaviour
 
             foreach (var storage in exportStorages) {
                 remains -= _converterStorage.SendResource(storage, result.type, remains);
-
+                
                 if (remains == 0)
                     break;
             }
@@ -146,9 +194,11 @@ public class Converter : MonoBehaviour
 
     private void Convert(float delta)
     {
-        _workProgress += workSpeed * delta;
+        _workProgress += workSpeed * _workSpeedMultiplier * delta;
 
         if (_workProgress >= workAmount) {
+            _workProgress = 0;
+
             SendResult();
             _started = false;
 
@@ -156,6 +206,8 @@ public class Converter : MonoBehaviour
 
             onConvertEnds?.Invoke();
         }
+
+        progressBar.fillAmount = _workProgress / workAmount;
     }
 
     /// <summary>
@@ -172,5 +224,39 @@ public class Converter : MonoBehaviour
         /// Количество ресурса на выходе / необходимого для производства
         /// </summary>
         public int convertAmount;
+    }
+
+    [System.Serializable]
+    public struct CommonUpgrade
+    {
+        public int baseCost;
+        public float costMultiplier;
+
+        public int maxLevel;
+        public float workSpeedMultiplier;
+        public float storageCapacityMultiplier;
+
+        public string description;
+    }
+
+    [System.Serializable]
+    public struct TierUpgrade
+    {
+        public int cost;
+
+        public Transform[] tierParts;
+        public ConvertInfo[] tierConvertCost;
+        public ConvertInfo[] tierConvertResult;
+
+        public string description;
+
+        public void EnableTierParts()
+        {
+            if (tierParts == null)
+                return;
+
+            foreach (var part in tierParts)
+                part.gameObject.SetActive(true);
+        }
     }
 }

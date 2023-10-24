@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ResourceDisplay : MonoBehaviour
@@ -11,7 +10,7 @@ public class ResourceDisplay : MonoBehaviour
     private Dictionary<ResourceType, int> _resources;
     private Dictionary<ResourceType, (Transform row, Image icon, TMP_Text counter)> _rows;
 
-    private void Start()
+    private void Awake()
     {
         _resources = new Dictionary<ResourceType, int>();
         _rows = new Dictionary<ResourceType, (Transform row, Image icon, TMP_Text counter)>();
@@ -31,7 +30,7 @@ public class ResourceDisplay : MonoBehaviour
     private (Transform, Image, TMP_Text) AddRow(ResourceType type)
     {
         Transform row = Instantiate(rowPrefab, transform).transform;
-        
+
         Image icon = row.GetComponentInChildren<Image>();
         icon.sprite = Resources.Load<Sprite>(ResourcesCollection.GetResource(type).iconPath);
 
@@ -40,7 +39,7 @@ public class ResourceDisplay : MonoBehaviour
 
     private void UpdateRow(ResourceType type)
     {
-        if (!_resources.ContainsKey(type)) 
+        if (!_resources.ContainsKey(type))
             return;
 
         _rows[type].row.gameObject.SetActive(_resources[type] > 0);

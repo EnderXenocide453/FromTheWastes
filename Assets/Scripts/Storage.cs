@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,14 +14,17 @@ public class Storage : MonoBehaviour
     /// Типы хранимых ресурсов
     /// </summary>
     [SerializeField] private ResourceType[] resourceTypes;
+
     /// <summary>
     /// Объем хранилища
     /// </summary>
     [SerializeField] private int capacity;
+
     /// <summary>
     /// Бесконечен ли ресурс
     /// </summary>
     [SerializeField] private bool endless;
+
     [SerializeField] private TMP_Text counter;
     [SerializeField] private ResourceDisplay resourceDisplay;
 
@@ -30,37 +32,55 @@ public class Storage : MonoBehaviour
     /// Ресурсы в хранилище
     /// </summary>
     private Dictionary<ResourceType, Resource> _resources;
+
     /// <summary>
     /// Общее количество хранимых ресурсов
     /// </summary>
     private int _count = 0;
 
+    private float _capacityMultiplier = 1;
+
     /// <summary>
     /// Делегат для событий хранилища
     /// </summary>
     public delegate void StorageEventHandler(object obj);
+
     /// <summary>
     /// Событие изменения количества ресурсов
     /// </summary>
     public event StorageEventHandler onCountChanged;
+
     /// <summary>
     /// Событие переполнения хранилища
     /// </summary>
     public event StorageEventHandler onStorageFilled;
+
     /// <summary>
     /// Событие опустошения хранилища
     /// </summary>
     public event StorageEventHandler onStorageEmptied;
 
+    public int Capacity
+    {
+        get => Mathf.RoundToInt(_capacityMultiplier * capacity);
+    }
+
     private void Awake()
     {
         InitStorage();
-        onCountChanged += (object obj) => {
-            (ResourceType type, int count) = ((ResourceType, int)) obj;
+        onCountChanged += (object obj) =>
+        {
+            (ResourceType type, int count) = ((ResourceType, int))obj;
 
             CheckCount(obj);
             UpdateUI(type);
         };
+    }
+
+    private void OnEnable()
+    {
+        if (_resources == null)
+            InitStorage();
     }
 
     /// <summary>
@@ -69,7 +89,7 @@ public class Storage : MonoBehaviour
     /// <param name="other">Хранилище-адресат</param>
     /// <param name="type">Тип отправляемого ресурса</param>
     /// <param name="sendCount">Количество отправляемого ресурса. Должно быть больше 0</param>
-    /// /// <returns>Количество отправленного ресурса</return
+    /// <returns>Количество отправленного ресурса</return
     public int SendResource(Storage other, ResourceType type, int sendCount = 1)
     {
         //Проверка возможности обращения к ресурсу
@@ -81,7 +101,7 @@ public class Storage : MonoBehaviour
         sendCount = endless ? sendCount : (_resources[type].count > 0 ? Mathf.Clamp(sendCount, 1, _resources[type].count) : 0);
 
         //Если количество меньше 1, отправка невозможна
-        if (sendCount < 1) 
+        if (sendCount < 1)
             return 0;
 
         //Отправка ресурсов и изменение количества собстенных ресурсов на принятое хранилищем-адресатом
@@ -121,6 +141,13 @@ public class Storage : MonoBehaviour
         return types.ToArray();
     }
 
+    public void SetCapacityMultiplier(float multiplier)
+    {
+        _capacityMultiplier = multiplier;
+
+        UpdateCounter();
+    }
+
     /// <summary>
     /// Метод инициализации хранилища
     /// </summary>
@@ -136,8 +163,7 @@ public class Storage : MonoBehaviour
 
                 id++;
             }
-        } 
-        else if (resourceTypes == null || resourceTypes.Length == 0) {
+        } else if (resourceTypes == null || resourceTypes.Length == 0) {
             Debug.Log($"Не заполнен массив ресурсов в хранилище объекта {gameObject.name}");
             return;
         }
@@ -145,7 +171,7 @@ public class Storage : MonoBehaviour
         foreach (var type in resourceTypes) {
             if (!_resources.TryAdd(type, ResourcesCollection.GetResource(type)))
                 Debug.Log($"Ресурс типа {_resources[type].name} уже назначен в хранилище объекта {gameObject.name}");
-            //UpdateUI(type);
+            UpdateUI(type);
         }
     }
 
@@ -155,11 +181,10 @@ public class Storage : MonoBehaviour
     private void CheckCount(object obj = null)
     {
         filled = false;
-        if (_count == capacity) {
+        if (_count == Capacity) {
             filled = true;
             onStorageFilled?.Invoke(obj);
-        }
-        else if (_count == 0)
+        } else if (_count == 0)
             onStorageEmptied?.Invoke(obj);
     }
 
@@ -185,8 +210,6 @@ public class Storage : MonoBehaviour
 
         onCountChanged?.Invoke((type, verified));
 
-        Debug.Log($"Количество ресурса {_resources[type].name} теперь равно {_resources[type].count}");
-
         return verified;
     }
 
@@ -206,8 +229,8 @@ public class Storage : MonoBehaviour
         }
 
         //Если после добавления общее количество превысит вместительность, возвращаем разность вместительности и текущего общего количества
-        if (_count + count > capacity) {
-            return capacity - _count;
+        if (_count + count > Capacity) {
+            return Capacity - _count;
         }
 
         //Если при добавлении числа к количеству ресурса оно станет отрицательным, возвращаем отрицательное количество ресурса
@@ -221,9 +244,13 @@ public class Storage : MonoBehaviour
 
     private void UpdateUI(ResourceType type)
     {
-        if (counter)
-            counter.text = $"{_count}/{capacity}";
-
+        UpdateCounter();
         resourceDisplay?.SetResource(type, GetResourceCount(type));
+    }
+
+    private void UpdateCounter()
+    {
+        if (counter)
+            counter.text = $"{_count}/{Capacity}";
     }
 }
