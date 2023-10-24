@@ -8,7 +8,7 @@ public class Store : MonoBehaviour
     private Dictionary<ResourceType, int> _priceList;
     private Storage _storeStorage;
     [SerializeField] private Storage importStorage;
-    [SerializeField] private Converter.ConvertInfo[] priceList;
+    [SerializeField] private ConvertInfo[] priceList;
     private void Awake()
     {
         Init();

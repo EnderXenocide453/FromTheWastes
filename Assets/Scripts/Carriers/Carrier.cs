@@ -12,10 +12,14 @@ public abstract class Carrier : MonoBehaviour
     /// Хранилище носильщика
     /// </summary>
     public Storage storage { get; private set; }
+
+    public int WorkSpeed { get => Mathf.RoundToInt(workSpeed * workSpeedModifier); }
+    public int MoveSpeed { get => Mathf.RoundToInt(moveSpeed * speedModifier); }
+
     /// <summary>
     /// Скорость работы носильщика (ед./сек.)
     /// </summary>
-    public float workSpeed = 5;
+    [SerializeField] private float workSpeed = 5;
     /// <summary>
     /// Маска слоёв объектов, с которыми носильщик может взаимодействовать
     /// </summary>
@@ -32,6 +36,10 @@ public abstract class Carrier : MonoBehaviour
     /// Скорость поворота в сторону движения
     /// </summary>
     [SerializeField] private float rotationSpeed = 10;
+
+    protected float speedModifier = 1;
+    protected float workSpeedModifier = 1;
+    protected float capacityModifier = 1;
 
     /// <summary>
     /// Вращение, к которому стремится носильщик
@@ -152,7 +160,7 @@ public abstract class Carrier : MonoBehaviour
     private void Move()
     {
         Vector3 velocity = new Vector3(_body.velocity.x, 0, _body.velocity.z);
-        velocity = Vector3.MoveTowards(velocity, moveDir * moveSpeed, acceleration);
+        velocity = Vector3.MoveTowards(velocity, moveDir * MoveSpeed, acceleration);
 
         _body.velocity = new Vector3(velocity.x, _body.velocity.y, velocity.z);
     }

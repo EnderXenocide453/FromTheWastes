@@ -77,12 +77,6 @@ public class Storage : MonoBehaviour
         };
     }
 
-    private void OnEnable()
-    {
-        if (_resources == null)
-            InitStorage();
-    }
-
     /// <summary>
     /// Отправляет ресурс type в хранилище other в количестве count
     /// </summary>
@@ -223,8 +217,6 @@ public class Storage : MonoBehaviour
     {
         //Проверка возможности хранения ресурса
         if (!_resources.ContainsKey(type)) {
-            Debug.Log($"Ресурс {type} не может храниться в {gameObject.name}");
-
             return 0;
         }
 

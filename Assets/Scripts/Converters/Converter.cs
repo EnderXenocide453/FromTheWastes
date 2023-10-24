@@ -14,7 +14,7 @@ public class Converter : MonoBehaviour
     [SerializeField] private ConvertInfo[] convertCost;
     [SerializeField] private ConvertInfo[] convertResult;
     [SerializeField] private CommonUpgrade commonUpgrade;
-    [SerializeField] private TierUpgrade[] tierUpgrades;
+    [SerializeField] private ConverterTierUpgrade[] tierUpgrades;
 
     [SerializeField] private Image progressBar;
 
@@ -36,12 +36,12 @@ public class Converter : MonoBehaviour
     public event ConverterHandler onConvertEnds;
     public event ConverterHandler onConvertStart;
     public event ConverterHandler onConverterReady;
-    public event ConverterHandler onMaxLevelReached;
 
     private void Start()
     {
         ValidateResources();
         InitStorage();
+        InitUpgrades();
     }
 
     private void FixedUpdate()
@@ -49,41 +49,7 @@ public class Converter : MonoBehaviour
         if (_started)
             Convert(Time.fixedDeltaTime);
 
-        UpgradeTier();
-    }
-
-    public void Upgrade()
-    {
-        if (_level >= commonUpgrade.maxLevel)
-            return;
-
-        _level++;
-
-        _workSpeedMultiplier += commonUpgrade.workSpeedMultiplier;
-        _capacityMultiplier += commonUpgrade.storageCapacityMultiplier;
-
-        foreach (var storage in importStorages)
-            storage.SetCapacityMultiplier(_capacityMultiplier);
-        foreach (var storage in exportStorages)
-            storage.SetCapacityMultiplier(_capacityMultiplier);
-
-        if (_level == commonUpgrade.maxLevel)
-            onMaxLevelReached?.Invoke();
-    }
-
-    public void UpgradeTier()
-    {
-        if (tierUpgrades == null || _tier >= tierUpgrades.Length)
-            return;
-
-        TierUpgrade tier = tierUpgrades[_tier];
-
-        tier.EnableTierParts();
-
-        convertCost = tier.tierConvertCost;
-        convertResult = tier.tierConvertResult;
-
-        _tier++;
+        //UpgradeTier();
     }
 
     private void ValidateResources()
@@ -178,20 +144,6 @@ public class Converter : MonoBehaviour
         }
     }
 
-    private void SendResult()
-    {
-        foreach(var result in convertResult) {
-            int remains = result.convertAmount;
-
-            foreach (var storage in exportStorages) {
-                remains -= _converterStorage.SendResource(storage, result.type, remains);
-                
-                if (remains == 0)
-                    break;
-            }
-        }
-    }
-
     private void Convert(float delta)
     {
         _workProgress += workSpeed * _workSpeedMultiplier * delta;
@@ -210,53 +162,58 @@ public class Converter : MonoBehaviour
         progressBar.fillAmount = _workProgress / workAmount;
     }
 
-    /// <summary>
-    /// Тип и количество ресурса на выходе / необходимого для производства
-    /// </summary>
-    [System.Serializable]
-    public struct ConvertInfo
+    private void SendResult()
     {
-        /// <summary>
-        /// Тип ресурса
-        /// </summary>
-        public ResourceType type;
-        /// <summary>
-        /// Количество ресурса на выходе / необходимого для производства
-        /// </summary>
-        public int convertAmount;
-    }
+        foreach(var result in convertResult) {
+            int remains = result.convertAmount;
 
-    [System.Serializable]
-    public struct CommonUpgrade
-    {
-        public int baseCost;
-        public float costMultiplier;
-
-        public int maxLevel;
-        public float workSpeedMultiplier;
-        public float storageCapacityMultiplier;
-
-        public string description;
-    }
-
-    [System.Serializable]
-    public struct TierUpgrade
-    {
-        public int cost;
-
-        public Transform[] tierParts;
-        public ConvertInfo[] tierConvertCost;
-        public ConvertInfo[] tierConvertResult;
-
-        public string description;
-
-        public void EnableTierParts()
-        {
-            if (tierParts == null)
-                return;
-
-            foreach (var part in tierParts)
-                part.gameObject.SetActive(true);
+            foreach (var storage in exportStorages) {
+                remains -= _converterStorage.SendResource(storage, result.type, remains);
+                
+                if (remains == 0)
+                    break;
+            }
         }
     }
+
+    private void InitUpgrades()
+    {
+        commonUpgrade.onUpgraded += Upgrade;
+        tierUpgrades[0].onUpgraded += () => UpgradeTier(tierUpgrades[0]);
+    }
+
+    private void Upgrade()
+    {
+        _workSpeedMultiplier = commonUpgrade.WorkSpeedMultiplier;
+        _capacityMultiplier = commonUpgrade.StorageCapacityMultiplier;
+
+        foreach (var storage in importStorages)
+            storage.SetCapacityMultiplier(_capacityMultiplier);
+        foreach (var storage in exportStorages)
+            storage.SetCapacityMultiplier(_capacityMultiplier);
+    }
+
+    private void UpgradeTier(ConverterTierUpgrade tier)
+    {
+        convertCost = tier.tierConvertCost;
+        convertResult = tier.tierConvertResult;
+
+        Upgrade nextTier = tier.Next;
+    }
+}
+
+/// <summary>
+/// Тип и количество ресурса на выходе / необходимого для производства
+/// </summary>
+[System.Serializable]
+public struct ConvertInfo
+{
+    /// <summary>
+    /// Тип ресурса
+    /// </summary>
+    public ResourceType type;
+    /// <summary>
+    /// Количество ресурса на выходе / необходимого для производства
+    /// </summary>
+    public int convertAmount;
 }
