@@ -73,9 +73,12 @@ public enum ResourceType
     Waste,
     Garbage,
     UsefulJunk,
-    Metal,
-    Plastmass,
-    Glass
+    Material,
+    DamagedDetail,
+    RestoredDetail,
+    DamagedTool,
+    RepairedTool,
+    Cash
 }
 
 /// <summary>
@@ -83,6 +86,11 @@ public enum ResourceType
 /// </summary>
 public static class ResourcesCollection
 {
+    public static Dictionary<ResourceType, Resource> Resources 
+    { 
+        get => new Dictionary<ResourceType, Resource>(_resources);
+    }
+
     /// <summary>
     /// Словарь с экземплярами ресурсов
     /// </summary>

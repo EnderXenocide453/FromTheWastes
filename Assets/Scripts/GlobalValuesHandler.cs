@@ -18,8 +18,11 @@ public class GlobalValuesHandler : MonoBehaviour
                 value = 0;
 
             _cash = value;
+            cashCounter.text = $"{_cash}";
         }
     }
+
+    [SerializeField] private TMPro.TMP_Text cashCounter;
 
     private int _cash;
 

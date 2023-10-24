@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class Storage : MonoBehaviour
 {
+    public bool handleEverything;
     public bool filled { get; private set; }
 
     /// <summary>
@@ -126,8 +127,17 @@ public class Storage : MonoBehaviour
     private void InitStorage()
     {
         _resources = new Dictionary<ResourceType, Resource>();
+        if (handleEverything) {
+            resourceTypes = new ResourceType[ResourcesCollection.Resources.Count];
+            int id = 0;
 
-        if (resourceTypes == null || resourceTypes.Length == 0) {
+            foreach (var res in ResourcesCollection.Resources) {
+                resourceTypes[id] = res.Key;
+
+                id++;
+            }
+        } 
+        else if (resourceTypes == null || resourceTypes.Length == 0) {
             Debug.Log($"Не заполнен массив ресурсов в хранилище объекта {gameObject.name}");
             return;
         }

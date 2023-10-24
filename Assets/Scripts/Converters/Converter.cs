@@ -159,7 +159,7 @@ public class Converter : MonoBehaviour
     }
 
     /// <summary>
-    /// Хранилище и количество ресурса на выходе / необходимого для производства
+    /// Тип и количество ресурса на выходе / необходимого для производства
     /// </summary>
     [System.Serializable]
     public struct ConvertInfo
