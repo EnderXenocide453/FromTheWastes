@@ -32,14 +32,16 @@ public class ResourceCreator : MonoBehaviour
 public class Resource
 {
     public ResourceType type = ResourceType.Waste;
-    public string prefabPath = "Prefabs/default.prefab";
+    public string iconPath = "Icons/default";
+    public string prefabPath = "Prefabs/default";
     public string name = "unknown";
     public int count = 0;
 
     public Resource()
     {
         type = ResourceType.Waste;
-        prefabPath = "Prefabs/default.prefab";
+        iconPath = "Icons/default";
+        prefabPath = "Prefabs/default";
         name = "unknown";
         count = 0;
     }
@@ -47,17 +49,19 @@ public class Resource
     public Resource(Resource copy)
     {
         type = copy.type;
+        iconPath = copy.iconPath;
         prefabPath = copy.prefabPath;
         name = copy.name;
-        count = copy.count;
+        count = 0;
     }
 
-    public Resource(ResourceType type, string prefabPath, string name, int count)
+    public Resource(ResourceType type, string prefabPath, string iconPath, string name, int count)
     {
         this.type = type;
+        this.iconPath = iconPath;
         this.prefabPath = prefabPath;
         this.name = name;
-        this.count = count;
+        this.count = 0;
     }
 }
 

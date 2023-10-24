@@ -9,6 +9,20 @@ public class GlobalValuesHandler : MonoBehaviour
 
     public KeyCode interactKey = KeyCode.E;
 
+    public int Cash
+    {
+        get => _cash;
+        set
+        {
+            if (value < 0)
+                value = 0;
+
+            _cash = value;
+        }
+    }
+
+    private int _cash;
+
     public delegate void KeyHandler();
     public event KeyHandler onInteractKeyDown;
     public event KeyHandler onInteractKeyUp;

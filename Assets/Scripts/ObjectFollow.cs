@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
+public class ObjectFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
     [SerializeField] private float speed = 0.5f;

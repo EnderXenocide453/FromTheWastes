@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -21,6 +22,8 @@ public class Storage : MonoBehaviour
     /// Бесконечен ли ресурс
     /// </summary>
     [SerializeField] private bool endless;
+    [SerializeField] private TMP_Text counter;
+    [SerializeField] private ResourceDisplay resourceDisplay;
 
     /// <summary>
     /// Ресурсы в хранилище
@@ -51,7 +54,12 @@ public class Storage : MonoBehaviour
     private void Awake()
     {
         InitStorage();
-        onCountChanged += CheckCount;
+        onCountChanged += (object obj) => {
+            (ResourceType type, int count) = ((ResourceType, int)) obj;
+
+            CheckCount(obj);
+            UpdateUI(type);
+        };
     }
 
     /// <summary>
@@ -124,9 +132,11 @@ public class Storage : MonoBehaviour
             return;
         }
 
-        foreach (var type in resourceTypes)
+        foreach (var type in resourceTypes) {
             if (!_resources.TryAdd(type, ResourcesCollection.GetResource(type)))
                 Debug.Log($"Ресурс типа {_resources[type].name} уже назначен в хранилище объекта {gameObject.name}");
+            //UpdateUI(type);
+        }
     }
 
     /// <summary>
@@ -197,5 +207,13 @@ public class Storage : MonoBehaviour
 
         //Если выхода за рамки не последовало, возвращаем число неизменным
         return count;
+    }
+
+    private void UpdateUI(ResourceType type)
+    {
+        if (counter)
+            counter.text = $"{_count}/{capacity}";
+
+        resourceDisplay?.SetResource(type, GetResourceCount(type));
     }
 }
