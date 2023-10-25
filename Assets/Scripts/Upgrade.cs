@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+#region Улучшения
 [System.Serializable]
 public abstract class Upgrade
 {
     [SerializeField] protected string name = "NaN";
     [SerializeField, TextArea] protected string description = "NaN";
     [SerializeField] protected int baseCost;
-    [SerializeField] protected int costModifier;
+    [SerializeField] protected float costModifier;
     
     protected Upgrade _nextUpgrade;
     
@@ -44,7 +46,7 @@ public class CommonUpgrade : Upgrade
 
     public event UpgradeHandler onMaxLevel;
 
-    public override int Cost { get => (currentLevel * costModifier + 1) * baseCost; }
+    public override int Cost { get => Mathf.RoundToInt((currentLevel * costModifier + 1) * baseCost); }
 
     public override string Description
     {
@@ -107,3 +109,76 @@ public class ConverterTierUpgrade : Upgrade
             part.gameObject.SetActive(true);
     }
 }
+#endregion
+
+#region Контроллеры улучшений
+[System.Serializable]
+public abstract class Upgrader
+{
+    public abstract Upgrade[] CurrentUpgrades { get; }
+
+    public delegate void UpgraderHandler();
+
+    /// <summary>
+    /// Инициализация улучшений
+    /// </summary>
+    protected abstract void Init();
+}
+
+[System.Serializable]
+public class ConverterUpgrader : Upgrader
+{
+    [SerializeField] private CommonUpgrade commonUpgrade;
+    [SerializeField] private ConverterTierUpgrade[] tierUpgrades;
+
+    private int _curTier;
+
+    public event UpgraderHandler onCommonUpgrade;
+    public event UpgraderHandler onTierUpgrade;
+
+    public ConverterTierUpgrade CurrentTier { get => tierUpgrades[_curTier]; }
+    public CommonUpgrade CommonUpgrade { get => commonUpgrade; }
+
+    public override Upgrade[] CurrentUpgrades
+    {
+        get
+        {
+            return new Upgrade[]
+            {
+                CommonUpgrade,
+                CurrentTier
+            };
+        }
+    }
+
+    protected override void Init()
+    {
+        commonUpgrade.onUpgraded += Upgrade;
+
+        ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
+        tier.onUpgraded += () => UpgradeTier();
+
+        for (int i = 0; i < tierUpgrades.Length - 1; i++) {
+            tier = tierUpgrades[i];
+            tier.onUpgraded += () => UpgradeTier();
+            tier.SetNext(tierUpgrades[i + 1]);
+        }
+    }
+
+    private void Upgrade()
+    {
+        onCommonUpgrade?.Invoke();
+        
+        commonUpgrade = (CommonUpgrade)commonUpgrade.Next;
+        if (commonUpgrade != null)
+            commonUpgrade.onUpgraded += Upgrade;
+    }
+
+    private void UpgradeTier()
+    {
+        onTierUpgrade?.Invoke();
+
+        _curTier++;
+    }
+}
+#endregion

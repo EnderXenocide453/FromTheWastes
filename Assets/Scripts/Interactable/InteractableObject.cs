@@ -19,13 +19,13 @@ public abstract class InteractableObject : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-            ShowDescription(true);
+            OnPlayerEnter();
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-            ShowDescription(false);
+            OnPlayerExit();
     }
 
     /// <summary>
@@ -36,6 +36,15 @@ public abstract class InteractableObject : MonoBehaviour
     /// Вызывается при отпускании игроком кнопки взаимодействия или при выходе из триггера
     /// </summary>
     public abstract void StopInteract(Carrier carrier = null);
+
+    protected virtual void OnPlayerEnter() 
+    {
+        ShowDescription(true);
+    }
+    protected virtual void OnPlayerExit()
+    {
+        ShowDescription(false);
+    }
 
     /// <summary>
     /// Устанавливает значение _interactable равным active, при необходимости завершает взаимодействие

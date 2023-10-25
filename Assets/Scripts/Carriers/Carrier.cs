@@ -49,10 +49,6 @@ public abstract class Carrier : MonoBehaviour
     /// Направление движения
     /// </summary>
     protected Vector3 moveDir;
-    /// <summary>
-    /// Глобальные значения
-    /// </summary>
-    protected GlobalValuesHandler valuesHandler;
 
     /// <summary>
     /// Твердое тело объекта
@@ -80,7 +76,6 @@ public abstract class Carrier : MonoBehaviour
     private void Awake()
     {
         storage = GetComponent<Storage>();
-        valuesHandler = GameObject.FindWithTag("Global")?.GetComponent<GlobalValuesHandler>();
         _body = GetComponent<Rigidbody>();
 
         _nearInteractables = new Dictionary<int, InteractableObject>();

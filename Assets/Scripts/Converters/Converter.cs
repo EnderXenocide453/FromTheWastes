@@ -9,17 +9,16 @@ public class Converter : MonoBehaviour
     [SerializeField] private string converterName = "Без имени";
     [SerializeField] private float workAmount = 1;
     [SerializeField] private float workSpeed = 1;
-    [SerializeField] private bool randomizeOutput = false;
 
     [SerializeField] private Storage[] importStorages;
     [SerializeField] private Storage[] exportStorages;
     [SerializeField] private ConvertInfo[] convertCost;
     [SerializeField] private ConvertInfo[] convertResult;
-    [SerializeField] private CommonUpgrade commonUpgrade;
-    [SerializeField] private ConverterTierUpgrade[] tierUpgrades;
 
     [SerializeField] private Image progressBar;
-
+    [SerializeField] private UpgradeArea upgradeArea;
+    [SerializeField] private ConverterUpgrader upgrader;
+    
     private float _workProgress;
 
     private float _workSpeedMultiplier = 1;
@@ -28,12 +27,11 @@ public class Converter : MonoBehaviour
     private int _level;
     private int _tier;
 
+    private bool _started;
+
     private Storage _converterStorage;
 
     private Dictionary<ResourceType, int> _readyResources;
-
-    private bool _ready;
-    private bool _started;
 
     public delegate void ConverterHandler();
     public event ConverterHandler onConvertEnds;
@@ -102,21 +100,14 @@ public class Converter : MonoBehaviour
 
     private void CheckReadiness()
     {
-        foreach (var cost in convertCost) {
-            if (_readyResources[cost.type] < cost.amount) {
-                _ready = false;
+        foreach (var cost in convertCost)
+            if (_readyResources[cost.type] < cost.amount)
                 return;
-            }
-        }
 
-        foreach (var storage in exportStorages) {
-            if (storage.filled) {
-                _ready = false;
+        foreach (var storage in exportStorages)
+            if (storage.filled)
                 return;
-            }
-        }
 
-        _ready = true;
         onConverterReady?.Invoke();
         StartConvertation();
     }
@@ -189,33 +180,23 @@ public class Converter : MonoBehaviour
 
     private void InitUpgrades()
     {
-        commonUpgrade.onUpgraded += Upgrade;
+        upgradeArea.upgrader = upgrader;
 
-        ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
-        tier.onUpgraded += () => UpgradeTier(tier);
-
-        for (int i = 0; i < tierUpgrades.Length - 1; i++) {
-            tier = tierUpgrades[i];
-            tier.onUpgraded += () => UpgradeTier(tier);
-            tier.SetNext(tierUpgrades[i + 1]);
-        }
+        upgrader.onCommonUpgrade += Upgrade;
+        upgrader.onTierUpgrade += () => UpgradeTier(upgrader.CurrentTier);
     }
 
     private void Upgrade()
     {
-        _workSpeedMultiplier = commonUpgrade.WorkSpeedMultiplier;
-        _capacityMultiplier = commonUpgrade.StorageCapacityMultiplier;
-        Debug.Log(commonUpgrade.StorageCapacityMultiplier);
+        _workSpeedMultiplier = upgrader.CommonUpgrade.WorkSpeedMultiplier;
+        _capacityMultiplier = upgrader.CommonUpgrade.StorageCapacityMultiplier;
+        
         foreach (var storage in importStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
         foreach (var storage in exportStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
 
         _level++;
-
-        commonUpgrade = (CommonUpgrade)commonUpgrade.Next;
-        if (commonUpgrade != null)
-            commonUpgrade.onUpgraded += Upgrade;
     }
 
     private void UpgradeTier(ConverterTierUpgrade tier)

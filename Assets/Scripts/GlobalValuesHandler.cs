@@ -11,11 +11,19 @@ public class GlobalValuesHandler : MonoBehaviour
 
     [SerializeField] private TMPro.TMP_Text cashCounter;
 
+    public Transform upgradePanel;
+    public UpgradeUI upgradeUI;
+
     public delegate void KeyHandler();
 
     public event KeyHandler onInteractKeyDown;
 
     public event KeyHandler onInteractKeyUp;
+
+    private void Awake()
+    {
+        GlobalValues.handler = this;
+    }
 
     public int Cash
     {
@@ -38,4 +46,9 @@ public class GlobalValuesHandler : MonoBehaviour
         else if (Input.GetKeyUp(interactKey))
             onInteractKeyUp?.Invoke();
     }
+}
+
+public static class GlobalValues
+{
+    public static GlobalValuesHandler handler;
 }

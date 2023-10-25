@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Storage))]
 public class Store : MonoBehaviour
 {
-    private GlobalValuesHandler _globalValues;
     private Dictionary<ResourceType, int> _priceList;
     private Storage _storeStorage;
     [SerializeField] private Storage importStorage;
@@ -16,7 +15,6 @@ public class Store : MonoBehaviour
 
     private void Init()
     {
-        _globalValues = GameObject.FindWithTag("Global")?.GetComponent<GlobalValuesHandler>();
         _storeStorage = GetComponent<Storage>();
         _priceList = new Dictionary<ResourceType, int>();
 
@@ -53,6 +51,6 @@ public class Store : MonoBehaviour
         int price = _priceList[type] * count;
 
         importStorage.SendResource(_storeStorage, type, count);
-        _globalValues.Cash += price;
+        GlobalValues.handler.Cash += price;
     }
 }

@@ -7,12 +7,12 @@ public class PlayerCarrier : Carrier
 {
     void Start()
     {
-        valuesHandler.onInteractKeyDown += StartInteract;
-        valuesHandler.onInteractKeyUp += StopInteract;
+        GlobalValues.handler.onInteractKeyDown += StartInteract;
+        GlobalValues.handler.onInteractKeyUp += StopInteract;
     }
 
     protected override void GetDirection()
     {
-        moveDir = valuesHandler.GetAxis().normalized;
+        moveDir = GlobalValues.handler.GetAxis().normalized;
     }
 }

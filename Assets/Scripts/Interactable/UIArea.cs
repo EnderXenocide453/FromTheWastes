@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIArea : InteractableObject
 {
-    [SerializeField] Transform UI;
+    [SerializeField] protected Transform UI;
 
     private bool _isActive;
 
@@ -18,9 +18,21 @@ public class UIArea : InteractableObject
         return;
     }
 
+    protected override void OnPlayerExit()
+    {
+        DisableUI();
+        base.OnPlayerExit();
+    }
+
     private void ToggleUI()
     {
         _isActive = !_isActive;
         UI?.gameObject.SetActive(_isActive);
+    }
+
+    private void DisableUI()
+    {
+        _isActive = false;
+        UI?.gameObject.SetActive(false);
     }
 }
