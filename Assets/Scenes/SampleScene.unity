@@ -709,6 +709,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
   m_PrefabInstance: {fileID: 2103391315}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &429265746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
+  m_PrefabInstance: {fileID: 2103391315}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9869cd755a5a8ae46b55ffc3c01f92ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &472643907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1650,7 +1661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   cashCounter: {fileID: 1229208200}
-  upgradePanel: {fileID: 361000047}
+  upgradePanel: {fileID: 1451028252}
   upgradeUI: {fileID: 1370391730}
 --- !u!114 &646260385
 MonoBehaviour:
@@ -2785,6 +2796,8 @@ MonoBehaviour:
   exportStorages:
   - {fileID: 1335439278}
   - {fileID: 221201287}
+  - {fileID: 429265746}
+  - {fileID: 1399627902}
   convertCost:
   - type: 0
     amount: 1
@@ -2833,9 +2846,11 @@ MonoBehaviour:
         amount: 1
       tierConvertResult:
       - type: 1
-        amount: 1
+        amount: 3
       - type: 2
-        amount: 2
+        amount: 6
+      - type: 4
+        amount: 1
       tierParts:
       - {fileID: 302552267}
     - name: "\u0414\u0435\u0434"
@@ -2847,9 +2862,13 @@ MonoBehaviour:
         amount: 1
       tierConvertResult:
       - type: 1
-        amount: 1
+        amount: 29
       - type: 2
-        amount: 2
+        amount: 60
+      - type: 4
+        amount: 10
+      - type: 6
+        amount: 1
       tierParts:
       - {fileID: 1707243735}
 --- !u!4 &1399627899 stripped
@@ -2857,6 +2876,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
   m_PrefabInstance: {fileID: 472643907}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1399627902 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
+  m_PrefabInstance: {fileID: 472643907}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9869cd755a5a8ae46b55ffc3c01f92ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1404726713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4858,7 +4888,7 @@ MonoBehaviour:
   importStorage: {fileID: 1355892870}
   priceList:
   - type: 2
-    amount: 0
+    amount: 1
 --- !u!114 &2026319465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4871,7 +4901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9869cd755a5a8ae46b55ffc3c01f92ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handleEverything: 0
+  handleEverything: 1
   resourceTypes: 03000000050000000700000000000000
   capacity: 0
   endless: 1

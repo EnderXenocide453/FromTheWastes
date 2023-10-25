@@ -180,6 +180,7 @@ public class Converter : MonoBehaviour
 
     private void InitUpgrades()
     {
+        upgrader.Init();
         upgradeArea.upgrader = upgrader;
 
         upgrader.onCommonUpgrade += Upgrade;

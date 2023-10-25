@@ -81,7 +81,7 @@ public class CommonUpgrade : Upgrade
 
     public override void EnableUpgrade()
     {
-        if (currentLevel <= maxLevel) {
+        if (currentLevel < maxLevel) {
             _nextUpgrade = new CommonUpgrade(this);
             return;
         }
@@ -122,7 +122,7 @@ public abstract class Upgrader
     /// <summary>
     /// Инициализация улучшений
     /// </summary>
-    protected abstract void Init();
+    public abstract void Init();
 }
 
 [System.Serializable]
@@ -151,7 +151,7 @@ public class ConverterUpgrader : Upgrader
         }
     }
 
-    protected override void Init()
+    public override void Init()
     {
         commonUpgrade.onUpgraded += Upgrade;
 
