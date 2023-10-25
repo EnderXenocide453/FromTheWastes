@@ -22,8 +22,9 @@ public class Converter : MonoBehaviour
 
     private float _workSpeedMultiplier = 1;
     private float _capacityMultiplier = 1;
-    private int _level = 0;
-    private int _tier = 0;
+
+    private int _level;
+    private int _tier;
 
     private Storage _converterStorage;
 
@@ -48,8 +49,6 @@ public class Converter : MonoBehaviour
     {
         if (_started)
             Convert(Time.fixedDeltaTime);
-
-        //UpgradeTier();
     }
 
     private void ValidateResources()
@@ -179,18 +178,32 @@ public class Converter : MonoBehaviour
     private void InitUpgrades()
     {
         commonUpgrade.onUpgraded += Upgrade;
-        tierUpgrades[0].onUpgraded += () => UpgradeTier(tierUpgrades[0]);
+
+        ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
+        tier.onUpgraded += () => UpgradeTier(tier);
+
+        for (int i = 0; i < tierUpgrades.Length - 1; i++) {
+            tier = tierUpgrades[i];
+            tier.onUpgraded += () => UpgradeTier(tier);
+            tier.SetNext(tierUpgrades[i + 1]);
+        }
     }
 
     private void Upgrade()
     {
         _workSpeedMultiplier = commonUpgrade.WorkSpeedMultiplier;
         _capacityMultiplier = commonUpgrade.StorageCapacityMultiplier;
-
+        Debug.Log(commonUpgrade.StorageCapacityMultiplier);
         foreach (var storage in importStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
         foreach (var storage in exportStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
+
+        _level++;
+
+        commonUpgrade = (CommonUpgrade)commonUpgrade.Next;
+        if (commonUpgrade != null)
+            commonUpgrade.onUpgraded += Upgrade;
     }
 
     private void UpgradeTier(ConverterTierUpgrade tier)
@@ -198,7 +211,7 @@ public class Converter : MonoBehaviour
         convertCost = tier.tierConvertCost;
         convertResult = tier.tierConvertResult;
 
-        Upgrade nextTier = tier.Next;
+        _tier++;
     }
 }
 

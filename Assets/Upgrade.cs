@@ -8,7 +8,9 @@ public abstract class Upgrade
     [SerializeField] protected int costModifier;
     [SerializeField] protected string description = "NaN";
     [SerializeField] protected string name = "NaN";
-    [SerializeField] protected Upgrade nextUpgrade;
+    
+    protected Upgrade _nextUpgrade;
+    
     public delegate void UpgradeHandler();
 
     public event UpgradeHandler onUpgraded;
@@ -17,20 +19,26 @@ public abstract class Upgrade
     public abstract string Description { get; }
     public abstract string Name { get; }
     public abstract Upgrade Next { get; }
+    
     public void DoUpgrade()
     {
-        Init();
+        EnableUpgrade();
         onUpgraded?.Invoke();
     }
 
-    public abstract void Init();
+    public void SetNext(Upgrade next)
+    {
+        _nextUpgrade = next;
+    }
+
+    public abstract void EnableUpgrade();
 }
 
 [Serializable]
 public class CommonUpgrade : Upgrade
 {
-    [SerializeField] protected int currentLevel;
-    [SerializeField] protected int maxLevel;
+    [SerializeField] protected int currentLevel = 1;
+    [SerializeField] protected int maxLevel = 10;
     [SerializeField] protected float storageCapacityMultiplier;
     [SerializeField] protected float workSpeedMultiplier;
 
@@ -49,10 +57,10 @@ public class CommonUpgrade : Upgrade
     }
     public override Upgrade Next
     {
-        get => nextUpgrade;
+        get => _nextUpgrade;
     }
-    public float StorageCapacityMultiplier { get => currentLevel * storageCapacityMultiplier; }
-    public float WorkSpeedMultiplier { get => currentLevel * workSpeedMultiplier; }
+    public float StorageCapacityMultiplier { get => 1 + storageCapacityMultiplier * currentLevel; }
+    public float WorkSpeedMultiplier { get => 1 + workSpeedMultiplier * currentLevel; }
 
     public CommonUpgrade(CommonUpgrade previous)
     {
@@ -62,18 +70,21 @@ public class CommonUpgrade : Upgrade
         name = previous.name;
         description = previous.description;
 
+        storageCapacityMultiplier = previous.storageCapacityMultiplier;
+        workSpeedMultiplier = previous.workSpeedMultiplier;
+
         if (currentLevel == maxLevel)
             onMaxLevel?.Invoke();
     }
 
-    public override void Init()
+    public override void EnableUpgrade()
     {
         if (currentLevel <= maxLevel) {
-            nextUpgrade = new CommonUpgrade(this);
+            _nextUpgrade = new CommonUpgrade(this);
             return;
         }
 
-        nextUpgrade = null;
+        _nextUpgrade = null;
     }
 }
 
@@ -86,8 +97,8 @@ public class ConverterTierUpgrade : Upgrade
     public override int Cost { get => baseCost; }
     public override string Description { get => description; }
     public override string Name { get => name; }
-    public override Upgrade Next { get => nextUpgrade; }
-    public override void Init()
+    public override Upgrade Next { get => _nextUpgrade; }
+    public override void EnableUpgrade()
     {
         if (tierParts == null)
             return;
