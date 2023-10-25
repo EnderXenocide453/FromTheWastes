@@ -30,7 +30,7 @@ public class Store : MonoBehaviour
         }
 
         foreach (var price in priceList) {
-            _priceList.TryAdd(price.type, price.convertAmount);
+            _priceList.TryAdd(price.type, price.amount);
         }
 
         importStorage.onCountChanged += (object obj) =>

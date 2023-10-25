@@ -9,6 +9,8 @@ public class Converter : MonoBehaviour
     [SerializeField] private string converterName = "Без имени";
     [SerializeField] private float workAmount = 1;
     [SerializeField] private float workSpeed = 1;
+    [SerializeField] private bool randomizeOutput = false;
+
     [SerializeField] private Storage[] importStorages;
     [SerializeField] private Storage[] exportStorages;
     [SerializeField] private ConvertInfo[] convertCost;
@@ -37,6 +39,7 @@ public class Converter : MonoBehaviour
     public event ConverterHandler onConvertEnds;
     public event ConverterHandler onConvertStart;
     public event ConverterHandler onConverterReady;
+    public event ConverterHandler onConvertChange;
 
     private void Start()
     {
@@ -100,7 +103,7 @@ public class Converter : MonoBehaviour
     private void CheckReadiness()
     {
         foreach (var cost in convertCost) {
-            if (_readyResources[cost.type] < cost.convertAmount) {
+            if (_readyResources[cost.type] < cost.amount) {
                 _ready = false;
                 return;
             }
@@ -132,7 +135,7 @@ public class Converter : MonoBehaviour
     private void ConsumeCost()
     {
         foreach (var cost in convertCost) {
-            int remains = cost.convertAmount;
+            int remains = cost.amount;
 
             foreach(var storage in importStorages) {
                 remains -= storage.SendResource(_converterStorage, cost.type, remains);
@@ -149,22 +152,26 @@ public class Converter : MonoBehaviour
 
         if (_workProgress >= workAmount) {
             _workProgress = 0;
-
-            SendResult();
-            _started = false;
-
-            CheckReadiness();
-
-            onConvertEnds?.Invoke();
+            OnConvertEnds();
         }
 
         progressBar.fillAmount = _workProgress / workAmount;
     }
 
+    private void OnConvertEnds()
+    {
+        SendResult();
+        _started = false;
+
+        CheckReadiness();
+
+        onConvertEnds?.Invoke();
+    }
+
     private void SendResult()
     {
-        foreach(var result in convertResult) {
-            int remains = result.convertAmount;
+        foreach(var result in CalculateResult()) {
+            int remains = result.amount;
 
             foreach (var storage in exportStorages) {
                 remains -= _converterStorage.SendResource(storage, result.type, remains);
@@ -173,6 +180,11 @@ public class Converter : MonoBehaviour
                     break;
             }
         }
+    }
+
+    protected virtual ConvertInfo[] CalculateResult()
+    {
+        return convertResult;
     }
 
     private void InitUpgrades()
@@ -211,6 +223,8 @@ public class Converter : MonoBehaviour
         convertCost = tier.tierConvertCost;
         convertResult = tier.tierConvertResult;
 
+        onConvertChange?.Invoke();
+
         _tier++;
     }
 }
@@ -228,5 +242,11 @@ public struct ConvertInfo
     /// <summary>
     /// Количество ресурса на выходе / необходимого для производства
     /// </summary>
-    public int convertAmount;
+    public int amount;
+
+    public ConvertInfo(ResourceType type, int amount)
+    {
+        this.type = type;
+        this.amount = amount;
+    }
 }

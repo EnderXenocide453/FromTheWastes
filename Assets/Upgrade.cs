@@ -4,10 +4,10 @@ using UnityEngine;
 [System.Serializable]
 public abstract class Upgrade
 {
+    [SerializeField] protected string name = "NaN";
+    [SerializeField, TextArea] protected string description = "NaN";
     [SerializeField] protected int baseCost;
     [SerializeField] protected int costModifier;
-    [SerializeField] protected string description = "NaN";
-    [SerializeField] protected string name = "NaN";
     
     protected Upgrade _nextUpgrade;
     
