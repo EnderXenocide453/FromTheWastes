@@ -13,8 +13,9 @@ public abstract class Upgrade
     
     protected Upgrade _nextUpgrade;
     
+    public bool enabled = true;
+    
     public delegate void UpgradeHandler();
-
     public event UpgradeHandler onUpgraded;
 
     public abstract int Cost { get; }
@@ -24,8 +25,9 @@ public abstract class Upgrade
     
     public void DoUpgrade()
     {
-        EnableUpgrade();
+        PreUpgrade();
         onUpgraded?.Invoke();
+        PostUpgrade();
     }
 
     public void SetNext(Upgrade next)
@@ -33,7 +35,16 @@ public abstract class Upgrade
         _nextUpgrade = next;
     }
 
-    public abstract void EnableUpgrade();
+    /// <summary>
+    /// Удаление слушателей события
+    /// </summary>
+    public void RemoveListeners()
+    {
+        onUpgraded = null;
+    }
+
+    public abstract void PreUpgrade();
+    public abstract void PostUpgrade();
 }
 
 [Serializable]
@@ -64,15 +75,24 @@ public class CommonUpgrade : Upgrade
     public float StorageCapacityMultiplier { get => 1 + storageCapacityMultiplier * currentLevel; }
     public float WorkSpeedMultiplier { get => 1 + workSpeedMultiplier * currentLevel; }
 
-    public override void EnableUpgrade()
+    public override void PreUpgrade()
     {
-        if (currentLevel + 1 < maxLevel) {
+        if (currentLevel < maxLevel) {
             currentLevel++;
             _nextUpgrade = this;
             return;
         }
+    }
 
+    public override void PostUpgrade()
+    {
+        if (currentLevel < maxLevel)
+            return;
+
+        RemoveListeners();
+        enabled = false;
         _nextUpgrade = null;
+        onMaxLevel?.Invoke();
     }
 }
 
@@ -84,7 +104,10 @@ public class TierUpgrade : Upgrade
     public override string Description { get => description; }
     public override string Name { get => name; }
     public override Upgrade Next { get => _nextUpgrade; }
-    public override void EnableUpgrade()
+
+    public override void PostUpgrade() { }
+
+    public override void PreUpgrade()
     {
         if (tierParts == null)
             return;
@@ -132,27 +155,31 @@ public class ConverterUpgrader : Upgrader
     public event UpgraderHandler onHireEmployee;
     public event UpgraderHandler onEmployeeUpgrade;
 
-    public ConverterTierUpgrade CurrentTier { get => tierUpgrades[_curTier]; }
-    public CommonUpgrade ConverterUpgrade { get => converterUpgrade; }
-    public CommonUpgrade EmployeeUpgrade { get => _hired ? employeeUpgrade : null; }
+    public ConverterTierUpgrade CurrentTier { get => _curTier >= tierUpgrades.Length ? null : tierUpgrades[_curTier]; }
+    public CommonUpgrade ConverterUpgrade { get => converterUpgrade.enabled ? converterUpgrade : null; }
+    public CommonUpgrade EmployeeUpgrade { get => employeeUpgrade.enabled ? employeeUpgrade : null; }
 
     public override Upgrade[] CurrentUpgrades
     {
         get
         {
+            Debug.Log(converterUpgrade);
+
             return new Upgrade[]
             {
                 ConverterUpgrade,
                 CurrentTier,
-                _hired ? employeeUpgrade : hireEmployee
+                _hired ? EmployeeUpgrade : hireEmployee
             };
         }
     }
 
     public override void Init()
     {
-        converterUpgrade.onUpgraded += Upgrade;
-        employeeUpgrade.onUpgraded += UpgradeEmployee;
+        converterUpgrade.onUpgraded += () => onCommonUpgrade?.Invoke();
+
+        employeeUpgrade.onUpgraded += () => onEmployeeUpgrade?.Invoke();
+
         hireEmployee.onUpgraded += HireEmployee;
 
         ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
@@ -163,28 +190,6 @@ public class ConverterUpgrader : Upgrader
             tier.onUpgraded += () => UpgradeTier();
             tier.SetNext(tierUpgrades[i + 1]);
         }
-    }
-
-    private void Upgrade()
-    {
-        if (converterUpgrade.Next == null)
-            return;
-
-        converterUpgrade = (CommonUpgrade)converterUpgrade.Next;
-        
-        converterUpgrade.onUpgraded += Upgrade;
-        onCommonUpgrade?.Invoke();
-    }
-
-    private void UpgradeEmployee()
-    {
-        if (employeeUpgrade.Name == null)
-            return;
-
-        employeeUpgrade = (CommonUpgrade)employeeUpgrade.Next;
-
-        employeeUpgrade.onUpgraded += UpgradeEmployee;
-        onEmployeeUpgrade?.Invoke();
     }
 
     private void UpgradeTier()

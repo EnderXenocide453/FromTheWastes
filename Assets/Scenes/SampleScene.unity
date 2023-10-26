@@ -2817,10 +2817,11 @@ MonoBehaviour:
       name: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A"
       description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
         \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C"
-      baseCost: 50
+      baseCost: 2
       costModifier: 0.2
+      enabled: 1
       currentLevel: 0
-      maxLevel: 100
+      maxLevel: 2
       storageCapacityMultiplier: 0.1
       workSpeedMultiplier: 0.1
     tierUpgrades:
@@ -2831,6 +2832,7 @@ MonoBehaviour:
         \u0432\u0435\u0449\u0438"
       baseCost: 0
       costModifier: 0
+      enabled: 1
       tierParts:
       - {fileID: 1961636661}
       tierConvertCost:
@@ -2845,6 +2847,7 @@ MonoBehaviour:
       description: "\u0411\u043B\u0430\u0431\u043B\u0430\u0431\u043B\u0430"
       baseCost: 100
       costModifier: 0
+      enabled: 1
       tierParts:
       - {fileID: 302552267}
       tierConvertCost:
@@ -2861,6 +2864,7 @@ MonoBehaviour:
       description: "\u0411\u043B\u0430\u0431\u043B\u0430\u0431\u043B\u0430"
       baseCost: 1000
       costModifier: 0
+      enabled: 1
       tierParts:
       - {fileID: 1707243735}
       tierConvertCost:
@@ -2881,6 +2885,7 @@ MonoBehaviour:
         \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0443 \u0441\u044B\u0440\u044C\u044F"
       baseCost: 500
       costModifier: 0
+      enabled: 1
       tierParts:
       - {fileID: 1877129058}
     employeeUpgrade:
@@ -2889,8 +2894,9 @@ MonoBehaviour:
         \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u044F\u0435\u0442 \u0445\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435"
       baseCost: 250
       costModifier: 0.2
+      enabled: 1
       currentLevel: 0
-      maxLevel: 50
+      maxLevel: 25
       storageCapacityMultiplier: 0.2
       workSpeedMultiplier: 0.2
 --- !u!4 &1399627899 stripped

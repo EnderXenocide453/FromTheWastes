@@ -59,7 +59,7 @@ public class UpgradeUI : MonoBehaviour
         GlobalValues.Cash -= upgrade.Cost;
 
         upgrade.DoUpgrade();
-
+        
         RemoveUpgrade(id);
         AddUpgrade(upgrade.Next);
     }
