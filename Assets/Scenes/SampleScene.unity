@@ -2757,6 +2757,7 @@ Transform:
   - {fileID: 1961636661}
   - {fileID: 302552267}
   - {fileID: 1707243735}
+  - {fileID: 1877129058}
   - {fileID: 2978651929264935701}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
@@ -2808,17 +2809,18 @@ MonoBehaviour:
     amount: 1
   - type: 2
     amount: 2
+  employee: {fileID: 1877129052}
   progressBar: {fileID: 1727804175}
   upgradeArea: {fileID: 6364661452566318144}
   upgrader:
-    commonUpgrade:
+    converterUpgrade:
       name: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A"
-      description: "\u041F\u043E\u0432\u044B\u0448\u0430\u0435\u0442 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C
-        \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0438"
-      baseCost: 25
-      costModifier: 0.1
+      description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C"
+      baseCost: 50
+      costModifier: 0.2
       currentLevel: 0
-      maxLevel: 10
+      maxLevel: 100
       storageCapacityMultiplier: 0.1
       workSpeedMultiplier: 0.1
     tierUpgrades:
@@ -2829,6 +2831,8 @@ MonoBehaviour:
         \u0432\u0435\u0449\u0438"
       baseCost: 0
       costModifier: 0
+      tierParts:
+      - {fileID: 1961636661}
       tierConvertCost:
       - type: 0
         amount: 1
@@ -2837,12 +2841,12 @@ MonoBehaviour:
         amount: 1
       - type: 2
         amount: 2
-      tierParts:
-      - {fileID: 1961636661}
     - name: "\u041F\u0440\u043E\u0434\u0432\u0438\u043D\u0443\u0442\u044B\u0435 \u0430\u043B\u0433\u043E\u0440\u0438\u0442\u043C\u044B"
       description: "\u0411\u043B\u0430\u0431\u043B\u0430\u0431\u043B\u0430"
       baseCost: 100
       costModifier: 0
+      tierParts:
+      - {fileID: 302552267}
       tierConvertCost:
       - type: 0
         amount: 1
@@ -2853,12 +2857,12 @@ MonoBehaviour:
         amount: 6
       - type: 4
         amount: 1
-      tierParts:
-      - {fileID: 302552267}
     - name: "\u0414\u0435\u0434"
       description: "\u0411\u043B\u0430\u0431\u043B\u0430\u0431\u043B\u0430"
       baseCost: 1000
       costModifier: 0
+      tierParts:
+      - {fileID: 1707243735}
       tierConvertCost:
       - type: 0
         amount: 1
@@ -2871,8 +2875,24 @@ MonoBehaviour:
         amount: 10
       - type: 6
         amount: 1
+    hireEmployee:
+      name: "\u041D\u0430\u043D\u044F\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u043D\u0438\u043A\u0430"
+      description: "\u0410\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0438\u0440\u0443\u0435\u0442
+        \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0443 \u0441\u044B\u0440\u044C\u044F"
+      baseCost: 500
+      costModifier: 0
       tierParts:
-      - {fileID: 1707243735}
+      - {fileID: 1877129058}
+    employeeUpgrade:
+      name: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u043D\u0438\u043A\u0430"
+      description: "\u0423\u0441\u043A\u043E\u0440\u044F\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0443
+        \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u044F\u0435\u0442 \u0445\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435"
+      baseCost: 250
+      costModifier: 0.2
+      currentLevel: 0
+      maxLevel: 50
+      storageCapacityMultiplier: 0.2
+      workSpeedMultiplier: 0.2
 --- !u!4 &1399627899 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
@@ -4131,12 +4151,12 @@ GameObject:
   - component: {fileID: 1877129053}
   - component: {fileID: 1877129052}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Employee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1877129052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4285,11 +4305,11 @@ Transform:
   m_GameObject: {fileID: 1877129051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 1.25, z: -0.00000011920929}
+  m_LocalPosition: {x: 0, y: 1, z: -3.5999997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1373593006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1887473014
 PrefabInstance:
@@ -4349,11 +4369,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: resourceTypes.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: resourceTypes.Array.data[0]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
+      propertyPath: resourceTypes.Array.data[1]
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2249276451335589413, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5039,8 +5063,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   importStorage: {fileID: 1355892870}
   priceList:
-  - type: 2
-    amount: 1
+  - type: 0
+    amount: 10000
 --- !u!114 &2026319465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5980,7 +6004,6 @@ SceneRoots:
   - {fileID: 367811927}
   - {fileID: 223626444}
   - {fileID: 7036544818196090040}
-  - {fileID: 1877129058}
   - {fileID: 1373593006}
   - {fileID: 1166631737}
   - {fileID: 2026319469}

@@ -15,6 +15,8 @@ public class Converter : MonoBehaviour
     [SerializeField] private ConvertInfo[] convertCost;
     [SerializeField] private ConvertInfo[] convertResult;
 
+    [SerializeField] private EmployeeCarrier employee;
+
     [SerializeField] private Image progressBar;
     [SerializeField] private UpgradeArea upgradeArea;
     [SerializeField] private ConverterUpgrader upgrader;
@@ -191,12 +193,13 @@ public class Converter : MonoBehaviour
 
         upgrader.onCommonUpgrade += Upgrade;
         upgrader.onTierUpgrade += () => UpgradeTier(upgrader.CurrentTier);
+        upgrader.onEmployeeUpgrade += UpgradeEmployee;
     }
 
     private void Upgrade()
     {
-        _workSpeedMultiplier = upgrader.CommonUpgrade.WorkSpeedMultiplier;
-        _capacityMultiplier = upgrader.CommonUpgrade.StorageCapacityMultiplier;
+        _workSpeedMultiplier = upgrader.ConverterUpgrade.WorkSpeedMultiplier;
+        _capacityMultiplier = upgrader.ConverterUpgrade.StorageCapacityMultiplier;
         
         foreach (var storage in importStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
@@ -214,6 +217,12 @@ public class Converter : MonoBehaviour
         onConvertChange?.Invoke();
 
         _tier++;
+    }
+
+    private void UpgradeEmployee()
+    {
+        employee.SetCapacityModifier(upgrader.EmployeeUpgrade.StorageCapacityMultiplier);
+        employee.SetWorkSpeedModifier(upgrader.EmployeeUpgrade.WorkSpeedMultiplier);
     }
 }
 

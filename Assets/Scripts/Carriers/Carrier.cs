@@ -120,6 +120,16 @@ public abstract class Carrier : MonoBehaviour
         RemoveInteractable(other.attachedRigidbody.gameObject.GetInstanceID());
     }
 
+    public void SetCapacityModifier(float multiplier)
+    {
+        storage.SetCapacityMultiplier(multiplier);
+    }
+
+    public void SetWorkSpeedModifier(float multiplier)
+    {
+        workSpeedModifier = multiplier;
+    }
+
     /// <summary>
     /// Взаимодействовать с активными интерактивными объектами
     /// </summary>

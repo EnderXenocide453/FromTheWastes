@@ -77,10 +77,8 @@ public class CommonUpgrade : Upgrade
 }
 
 [Serializable]
-public class ConverterTierUpgrade : Upgrade
+public class TierUpgrade : Upgrade
 {
-    public ConvertInfo[] tierConvertCost;
-    public ConvertInfo[] tierConvertResult;
     public Transform[] tierParts;
     public override int Cost { get => baseCost; }
     public override string Description { get => description; }
@@ -94,6 +92,13 @@ public class ConverterTierUpgrade : Upgrade
         foreach (var part in tierParts)
             part.gameObject.SetActive(true);
     }
+}
+
+[Serializable]
+public class ConverterTierUpgrade : TierUpgrade
+{
+    public ConvertInfo[] tierConvertCost;
+    public ConvertInfo[] tierConvertResult;
 }
 #endregion
 
@@ -114,16 +119,22 @@ public abstract class Upgrader
 [System.Serializable]
 public class ConverterUpgrader : Upgrader
 {
-    [SerializeField] private CommonUpgrade commonUpgrade;
+    [SerializeField] private CommonUpgrade converterUpgrade;
     [SerializeField] private ConverterTierUpgrade[] tierUpgrades;
+    [SerializeField] private TierUpgrade hireEmployee;
+    [SerializeField] private CommonUpgrade employeeUpgrade;
 
     private int _curTier;
+    private bool _hired;
 
     public event UpgraderHandler onCommonUpgrade;
     public event UpgraderHandler onTierUpgrade;
+    public event UpgraderHandler onHireEmployee;
+    public event UpgraderHandler onEmployeeUpgrade;
 
     public ConverterTierUpgrade CurrentTier { get => tierUpgrades[_curTier]; }
-    public CommonUpgrade CommonUpgrade { get => commonUpgrade; }
+    public CommonUpgrade ConverterUpgrade { get => converterUpgrade; }
+    public CommonUpgrade EmployeeUpgrade { get => _hired ? employeeUpgrade : null; }
 
     public override Upgrade[] CurrentUpgrades
     {
@@ -131,15 +142,18 @@ public class ConverterUpgrader : Upgrader
         {
             return new Upgrade[]
             {
-                CommonUpgrade,
-                CurrentTier
+                ConverterUpgrade,
+                CurrentTier,
+                _hired ? employeeUpgrade : hireEmployee
             };
         }
     }
 
     public override void Init()
     {
-        commonUpgrade.onUpgraded += Upgrade;
+        converterUpgrade.onUpgraded += Upgrade;
+        employeeUpgrade.onUpgraded += UpgradeEmployee;
+        hireEmployee.onUpgraded += HireEmployee;
 
         ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
         tier.onUpgraded += () => UpgradeTier();
@@ -153,13 +167,24 @@ public class ConverterUpgrader : Upgrader
 
     private void Upgrade()
     {
-        if (commonUpgrade.Next == null)
+        if (converterUpgrade.Next == null)
             return;
 
-        commonUpgrade = (CommonUpgrade)commonUpgrade.Next;
+        converterUpgrade = (CommonUpgrade)converterUpgrade.Next;
         
-        commonUpgrade.onUpgraded += Upgrade;
+        converterUpgrade.onUpgraded += Upgrade;
         onCommonUpgrade?.Invoke();
+    }
+
+    private void UpgradeEmployee()
+    {
+        if (employeeUpgrade.Name == null)
+            return;
+
+        employeeUpgrade = (CommonUpgrade)employeeUpgrade.Next;
+
+        employeeUpgrade.onUpgraded += UpgradeEmployee;
+        onEmployeeUpgrade?.Invoke();
     }
 
     private void UpgradeTier()
@@ -167,6 +192,14 @@ public class ConverterUpgrader : Upgrader
         onTierUpgrade?.Invoke();
 
         _curTier++;
+    }
+
+    private void HireEmployee()
+    {
+        hireEmployee.SetNext(employeeUpgrade);
+
+        onHireEmployee?.Invoke();
+        _hired = true;
     }
 }
 #endregion
