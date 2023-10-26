@@ -111,10 +111,8 @@ public class Converter : MonoBehaviour
                 return;
 
         foreach (var storage in exportStorages)
-            if (storage.filled) {
-                Debug.Log("응응응응응응응응응응응응응응응응응응응응응응응�");
+            if (storage.filled)
                 return;
-            }
 
         onConverterReady?.Invoke();
         StartConvertation();

@@ -33,7 +33,7 @@ public class Resource
 {
     public ResourceType type = ResourceType.Waste;
     public string iconPath = "Icons/default";
-    public string prefabPath = "Prefabs/default";
+    public string prefabPath = "Prefabs/Resources/default";
     public string name = "unknown";
     public int count = 0;
 

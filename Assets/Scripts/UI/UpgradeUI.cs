@@ -30,7 +30,6 @@ public class UpgradeUI : MonoBehaviour
 
     public void AddUpgrade(Upgrade upgrade)
     {
-        Debug.Log(upgrade);
         if (upgrade == null)
             return;
 

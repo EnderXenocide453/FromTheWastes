@@ -7,10 +7,6 @@ public class GlobalValuesHandler : MonoBehaviour
 
     public KeyCode interactKey = KeyCode.E;
 
-    private int _cash;
-
-    [SerializeField] private TMPro.TMP_Text cashCounter;
-
     public Transform upgradePanel;
     public UpgradeUI upgradeUI;
 
@@ -19,8 +15,11 @@ public class GlobalValuesHandler : MonoBehaviour
     public delegate void KeyHandler();
 
     public event KeyHandler onInteractKeyDown;
-
     public event KeyHandler onInteractKeyUp;
+
+    [SerializeField] private TMPro.TMP_Text cashCounter;
+
+    private int _cash;
 
     private void Awake()
     {

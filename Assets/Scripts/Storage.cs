@@ -79,8 +79,8 @@ public class Storage : MonoBehaviour
     /// <returns>Количество отправленного ресурса</return
     public int SendResource(Storage other, ResourceType type, int sendCount = 1)
     {
-        //Проверка возможности обращения к ресурсу
-        if (!_resources.ContainsKey(type))
+        //Проверка возможности обращения к ресурсу и наличия свободного места
+        if (!_resources.ContainsKey(type) || other.filled)
             return 0;
 
         //Если ресурсы бесконечны, оставляем количество без изменений.
@@ -90,6 +90,8 @@ public class Storage : MonoBehaviour
         //Если количество меньше 1, отправка невозможна
         if (sendCount < 1)
             return 0;
+
+        AnimateSend(other.transform, _resources[type]);
 
         //Отправка ресурсов и изменение количества собстенных ресурсов на принятое хранилищем-адресатом
         return -ChangeResource(type, -other.ChangeResource(type, sendCount));
@@ -196,6 +198,9 @@ public class Storage : MonoBehaviour
     /// </summary>
     private void CheckCount()
     {
+        if (endless)
+            return;
+
         filled = false;
         if (_count == Capacity) {
             filled = true;
@@ -241,5 +246,11 @@ public class Storage : MonoBehaviour
     {
         if (counter)
             counter.text = $"{_count}/{Capacity}";
+    }
+
+    private void AnimateSend(Transform target, Resource sended)
+    {
+        ResourceAnimation res = Instantiate(Resources.Load<GameObject>(sended.prefabPath), transform.position, Quaternion.identity).GetComponent<ResourceAnimation>();
+        res.StartFollow(target);
     }
 }
