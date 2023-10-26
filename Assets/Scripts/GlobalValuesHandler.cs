@@ -14,6 +14,8 @@ public class GlobalValuesHandler : MonoBehaviour
     public Transform upgradePanel;
     public UpgradeUI upgradeUI;
 
+    public AlertPanel alertPanel;
+
     public delegate void KeyHandler();
 
     public event KeyHandler onInteractKeyDown;
@@ -51,4 +53,12 @@ public class GlobalValuesHandler : MonoBehaviour
 public static class GlobalValues
 {
     public static GlobalValuesHandler handler;
+    public static int Cash
+    {
+        get => handler.Cash;
+        set => handler.Cash = value;
+    }
+
+    public static void Alert(string text, Color color) => handler?.alertPanel.Alert(text, color);
+
 }

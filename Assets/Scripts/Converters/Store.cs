@@ -51,6 +51,6 @@ public class Store : MonoBehaviour
         int price = _priceList[type] * count;
 
         importStorage.SendResource(_storeStorage, type, count);
-        GlobalValues.handler.Cash += price;
+        GlobalValues.Cash += price;
     }
 }

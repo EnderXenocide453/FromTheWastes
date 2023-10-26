@@ -141,6 +141,7 @@ public class Storage : MonoBehaviour
     private void InitStorage()
     {
         _resources = new Dictionary<ResourceType, Resource>();
+
         if (handleEverything) {
             resourceTypes = new ResourceType[ResourcesCollection.Resources.Count];
             int id = 0;

@@ -44,12 +44,25 @@ public class UpgradeUI : MonoBehaviour
         int id = _counter;
 
         row.button.onClick.AddListener(delegate {
-            upgrade.DoUpgrade();
-            RemoveUpgrade(id);
-            AddUpgrade(upgrade.Next);
+            DoUpgrade(id, upgrade);
         });
 
         _counter++;
+    }
+
+    private void DoUpgrade(int id, Upgrade upgrade)
+    {
+        if (GlobalValues.Cash < upgrade.Cost) {
+            GlobalValues.Alert("Недостаточно средств", Color.red);
+            return;
+        }
+
+        GlobalValues.Cash -= upgrade.Cost;
+
+        upgrade.DoUpgrade();
+
+        RemoveUpgrade(id);
+        AddUpgrade(upgrade.Next);
     }
 
     private void RemoveUpgrade(int id)
