@@ -39,6 +39,7 @@ public class UpgradeUI : MonoBehaviour
 
         row.title.text = upgrade.Name;
         row.description.text = upgrade.Description;
+        row.cost.text = upgrade.Cost.ToString();
 
         int id = _counter;
 

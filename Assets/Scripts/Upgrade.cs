@@ -39,7 +39,7 @@ public abstract class Upgrade
 [Serializable]
 public class CommonUpgrade : Upgrade
 {
-    [SerializeField] protected int currentLevel = 1;
+    [SerializeField] protected int currentLevel = 0;
     [SerializeField] protected int maxLevel = 10;
     [SerializeField] protected float storageCapacityMultiplier;
     [SerializeField] protected float workSpeedMultiplier;
@@ -55,7 +55,7 @@ public class CommonUpgrade : Upgrade
 
     public override string Name
     {
-        get => $"{name} уровень {currentLevel}";
+        get => $"{name} уровень {currentLevel + 1}";
     }
     public override Upgrade Next
     {
@@ -64,25 +64,11 @@ public class CommonUpgrade : Upgrade
     public float StorageCapacityMultiplier { get => 1 + storageCapacityMultiplier * currentLevel; }
     public float WorkSpeedMultiplier { get => 1 + workSpeedMultiplier * currentLevel; }
 
-    public CommonUpgrade(CommonUpgrade previous)
-    {
-        currentLevel = previous.currentLevel + 1;
-        maxLevel = previous.maxLevel;
-
-        name = previous.name;
-        description = previous.description;
-
-        storageCapacityMultiplier = previous.storageCapacityMultiplier;
-        workSpeedMultiplier = previous.workSpeedMultiplier;
-
-        if (currentLevel == maxLevel)
-            onMaxLevel?.Invoke();
-    }
-
     public override void EnableUpgrade()
     {
-        if (currentLevel < maxLevel) {
-            _nextUpgrade = new CommonUpgrade(this);
+        if (currentLevel + 1 < maxLevel) {
+            currentLevel++;
+            _nextUpgrade = this;
             return;
         }
 
@@ -167,11 +153,13 @@ public class ConverterUpgrader : Upgrader
 
     private void Upgrade()
     {
-        onCommonUpgrade?.Invoke();
-        
+        if (commonUpgrade.Next == null)
+            return;
+
         commonUpgrade = (CommonUpgrade)commonUpgrade.Next;
-        if (commonUpgrade != null)
-            commonUpgrade.onUpgraded += Upgrade;
+        
+        commonUpgrade.onUpgraded += Upgrade;
+        onCommonUpgrade?.Invoke();
     }
 
     private void UpgradeTier()
