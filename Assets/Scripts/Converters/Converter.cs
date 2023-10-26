@@ -87,6 +87,12 @@ public class Converter : MonoBehaviour
 
         foreach (var storage in importStorages)
             storage.onCountChanged += (object obj) => HandleResourceChange(((ResourceType, int)) obj);
+
+        foreach (var storage in exportStorages)
+            storage.onCountChanged += (object obj) => {
+                if (!_started)
+                    CheckReadiness();
+            };
     }
 
     private void HandleResourceChange((ResourceType type, int count) change)
@@ -105,8 +111,10 @@ public class Converter : MonoBehaviour
                 return;
 
         foreach (var storage in exportStorages)
-            if (storage.filled)
+            if (storage.filled) {
+                Debug.Log("응응응응응응응응응응응응응응응응응응응응응응응�");
                 return;
+            }
 
         onConverterReady?.Invoke();
         StartConvertation();

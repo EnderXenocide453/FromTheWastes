@@ -68,13 +68,6 @@ public class Storage : MonoBehaviour
     private void Awake()
     {
         InitStorage();
-        onCountChanged += (object obj) =>
-        {
-            (ResourceType type, int count) = ((ResourceType, int))obj;
-
-            CheckCount(obj);
-            UpdateUI(type);
-        };
     }
 
     /// <summary>
@@ -170,19 +163,6 @@ public class Storage : MonoBehaviour
     }
 
     /// <summary>
-    /// Проверка количества для вызова событий
-    /// </summary>
-    private void CheckCount(object obj = null)
-    {
-        filled = false;
-        if (_count == Capacity) {
-            filled = true;
-            onStorageFilled?.Invoke(obj);
-        } else if (_count == 0)
-            onStorageEmptied?.Invoke(obj);
-    }
-
-    /// <summary>
     /// Изменяет количество ресурса type на значение count
     /// </summary>
     /// <param name="type">Тип изменяемого ресурса</param>
@@ -202,9 +182,25 @@ public class Storage : MonoBehaviour
         _count += verified;
         _resources[type].count += verified;
 
-        onCountChanged?.Invoke((type, verified));
+        CheckCount();
+        UpdateUI(type);
+
+        onCountChanged?.Invoke((type, count));
 
         return verified;
+    }
+
+    /// <summary>
+    /// Проверка количества для вызова событий
+    /// </summary>
+    private void CheckCount()
+    {
+        filled = false;
+        if (_count == Capacity) {
+            filled = true;
+            onStorageFilled?.Invoke(null);
+        } else if (_count == 0)
+            onStorageEmptied?.Invoke(null);
     }
 
     /// <summary>
