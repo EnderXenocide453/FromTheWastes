@@ -207,4 +207,21 @@ public class ConverterUpgrader : Upgrader
         _hired = true;
     }
 }
+
+[System.Serializable]
+public class PlayerUpgrader : Upgrader
+{
+    [SerializeField] private CommonUpgrade upgrade;
+
+    public event UpgraderHandler onUpgraded;
+
+    public CommonUpgrade PlayerUpgrade { get => upgrade.enabled ? upgrade : null; }
+
+    public override Upgrade[] CurrentUpgrades { get => new Upgrade[] { PlayerUpgrade }; }
+
+    public override void Init()
+    {
+        upgrade.onUpgraded += () => onUpgraded?.Invoke();
+    }
+}
 #endregion

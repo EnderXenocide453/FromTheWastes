@@ -52,6 +52,7 @@ public class GlobalValuesHandler : MonoBehaviour
 public static class GlobalValues
 {
     public static GlobalValuesHandler handler;
+
     public static int Cash
     {
         get => handler.Cash;
