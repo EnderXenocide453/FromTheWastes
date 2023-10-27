@@ -45,9 +45,9 @@ public class ResourceArea : InteractableObject
         if (!carrier) return;
         
         if (isImport)
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(TransportResource(carrier.storage, storage, workAmount / carrier.WorkSpeed)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(ShareResourceWithCarrier(carrier.storage, storage, carrier)));
         else
-            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(TransportResource(storage, carrier.storage, workAmount / carrier.WorkSpeed)));
+            _coroutines.Add(carrier.GetInstanceID(), StartCoroutine(ShareResourceWithCarrier(storage, carrier.storage, carrier)));
     }
 
     public override void StopInteract(Carrier carrier = null)
@@ -62,7 +62,7 @@ public class ResourceArea : InteractableObject
         _coroutines.Remove(id);
     }
 
-    public IEnumerator TransportResource(Storage from, Storage to, float delay)
+    public IEnumerator ShareResourceWithCarrier(Storage from, Storage to, Carrier carrier)
     {
         ResourceType[] types = from.FindIdentity(to);
 
@@ -71,7 +71,7 @@ public class ResourceArea : InteractableObject
                 from.SendResource(to, type);
             }
 
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(workAmount / carrier.WorkSpeed);
         }
     }
 }
