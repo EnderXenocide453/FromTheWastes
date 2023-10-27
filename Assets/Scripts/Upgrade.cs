@@ -50,10 +50,10 @@ public abstract class Upgrade
 [Serializable]
 public class CommonUpgrade : Upgrade
 {
-    [SerializeField] protected int currentLevel = 0;
     [SerializeField] protected int maxLevel = 10;
     [SerializeField] protected float storageCapacityMultiplier;
     [SerializeField] protected float workSpeedMultiplier;
+    public int currentLevel { get; private set; } = 0;
 
     public event UpgradeHandler onMaxLevel;
 
@@ -94,6 +94,14 @@ public class CommonUpgrade : Upgrade
         _nextUpgrade = null;
         onMaxLevel?.Invoke();
     }
+
+    public void UpgradeTo(int level)
+    {
+        currentLevel = Mathf.Clamp(level, 0, maxLevel);
+        _nextUpgrade = this;
+
+        PostUpgrade();
+    }
 }
 
 [Serializable]
@@ -130,6 +138,7 @@ public class ConverterTierUpgrade : TierUpgrade
 public abstract class Upgrader
 {
     public abstract Upgrade[] CurrentUpgrades { get; }
+    public abstract int[] SaveInfo { get; }
 
     public delegate void UpgraderHandler();
 
@@ -137,6 +146,7 @@ public abstract class Upgrader
     /// Инициализация улучшений
     /// </summary>
     public abstract void Init();
+    public abstract void UpgradeTo(int[] saveInfo);
 }
 
 [System.Serializable]
@@ -150,7 +160,7 @@ public class ConverterUpgrader : Upgrader
     private int _curTier;
     private bool _hired;
 
-    public event UpgraderHandler onCommonUpgrade;
+    public event UpgraderHandler onConverterUpgrade;
     public event UpgraderHandler onTierUpgrade;
     public event UpgraderHandler onHireEmployee;
     public event UpgraderHandler onEmployeeUpgrade;
@@ -163,8 +173,6 @@ public class ConverterUpgrader : Upgrader
     {
         get
         {
-            Debug.Log(converterUpgrade);
-
             return new Upgrade[]
             {
                 ConverterUpgrade,
@@ -174,9 +182,18 @@ public class ConverterUpgrader : Upgrader
         }
     }
 
+    public override int[] SaveInfo {
+        get => new int[]
+        {
+            converterUpgrade.currentLevel,
+            _curTier,
+            _hired ? employeeUpgrade.currentLevel : -1
+        };
+    }
+
     public override void Init()
     {
-        converterUpgrade.onUpgraded += () => onCommonUpgrade?.Invoke();
+        converterUpgrade.onUpgraded += () => onConverterUpgrade?.Invoke();
 
         employeeUpgrade.onUpgraded += () => onEmployeeUpgrade?.Invoke();
 
@@ -190,6 +207,25 @@ public class ConverterUpgrader : Upgrader
             tier.onUpgraded += () => UpgradeTier();
             tier.SetNext(tierUpgrades[i + 1]);
         }
+    }
+
+    public override void UpgradeTo(int[] saveInfo)
+    {
+        Init();
+
+        converterUpgrade.UpgradeTo(saveInfo[0]);
+
+        int targetTier = saveInfo[1];
+
+        for (int i = 0; i < targetTier; i++)
+            UpgradeTier();
+
+        //Если работник не нанят выходим из метода
+        if (saveInfo[2] < 0)
+            return;
+
+        HireEmployee();
+        employeeUpgrade.UpgradeTo(saveInfo[2]);
     }
 
     private void UpgradeTier()
@@ -219,9 +255,16 @@ public class PlayerUpgrader : Upgrader
 
     public override Upgrade[] CurrentUpgrades { get => new Upgrade[] { PlayerUpgrade }; }
 
+    public override int[] SaveInfo { get => new int[] { upgrade.currentLevel }; }
+
     public override void Init()
     {
         upgrade.onUpgraded += () => onUpgraded?.Invoke();
+    }
+
+    public override void UpgradeTo(int[] saveInfo)
+    {
+        upgrade.UpgradeTo(saveInfo[0]);
     }
 }
 #endregion
