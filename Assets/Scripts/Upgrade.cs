@@ -215,6 +215,7 @@ public class ConverterUpgrader : Upgrader
 
         converterUpgrade.UpgradeTo(saveInfo[0]);
 
+        _curTier = 0;
         int targetTier = saveInfo[1];
 
         for (int i = 0; i < targetTier; i++)

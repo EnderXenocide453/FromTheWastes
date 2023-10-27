@@ -12,19 +12,27 @@ public class ResourceDisplay : MonoBehaviour
 
     private void Awake()
     {
-        _resources = new Dictionary<ResourceType, int>();
-        _rows = new Dictionary<ResourceType, (Transform row, Image icon, TMP_Text counter)>();
+        Init();
     }
 
     public void SetResource(ResourceType type, int count)
     {
+        if (_resources == null)
+            _resources = new Dictionary<ResourceType, int>();
+
         if (!_resources.ContainsKey(type)) {
-            _resources.Add(type, 0);
-            _rows.Add(type, AddRow(type));
+            _resources.TryAdd(type, 0);
+            _rows.TryAdd(type, AddRow(type));
         }
 
         _resources[type] = count;
         UpdateRow(type);
+    }
+
+    private void Init()
+    {
+        _resources = new Dictionary<ResourceType, int>();
+        _rows = new Dictionary<ResourceType, (Transform row, Image icon, TMP_Text counter)>();
     }
 
     private (Transform, Image, TMP_Text) AddRow(ResourceType type)

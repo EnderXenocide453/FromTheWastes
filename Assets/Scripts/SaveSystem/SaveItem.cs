@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SaveItem
+public abstract class SaveItem : MonoBehaviour
 {
     public int saveID;
 
     public abstract SaveInfo SaveInfo { get; }
 
-    public void Init()
+    protected virtual void Start()
     {
         SaveItemCollector.AddSaveItem(this);
     }
@@ -24,4 +24,5 @@ public struct SaveInfo
     public Quaternion rotation;
 
     public Upgrader upgrader;
+    public Dictionary<ResourceType, int>[] storagesInfo;
 }

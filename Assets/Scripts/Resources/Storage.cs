@@ -36,7 +36,7 @@ public class Storage : MonoBehaviour
     /// <summary>
     /// Общее количество хранимых ресурсов
     /// </summary>
-    private int _count = 0;
+    [SerializeField] private int _count = 0;
 
     private float _capacityMultiplier = 1;
 
@@ -63,6 +63,20 @@ public class Storage : MonoBehaviour
     public int Capacity
     {
         get => Mathf.RoundToInt(_capacityMultiplier * capacity);
+    }
+
+    public Dictionary<ResourceType, int> ResourcesCount { 
+        get
+        {
+            if (_resources == null)
+                return null;
+
+            Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int>();
+            foreach (var res in _resources)
+                resources.Add(res.Key, res.Value.count);
+
+            return resources;
+        }
     }
 
     private void Awake()
@@ -138,11 +152,24 @@ public class Storage : MonoBehaviour
     }
 
     /// <summary>
+    /// Копирует свойства другого хранилища
+    /// </summary>
+    /// <param name="other">Объект копирования</param>
+    public void SetCount(Dictionary<ResourceType, int> count)
+    {
+        InitStorage();
+
+        foreach (var res in count)
+            ChangeResource(res.Key, res.Value);
+    }
+
+    /// <summary>
     /// Метод инициализации хранилища
     /// </summary>
     private void InitStorage()
     {
         _resources = new Dictionary<ResourceType, Resource>();
+        _count = 0;
 
         if (handleEverything) {
             resourceTypes = new ResourceType[ResourcesCollection.Resources.Count];
@@ -161,7 +188,7 @@ public class Storage : MonoBehaviour
         foreach (var type in resourceTypes) {
             if (!_resources.TryAdd(type, ResourcesCollection.GetResource(type)))
                 Debug.Log($"Ресурс типа {_resources[type].name} уже назначен в хранилище объекта {gameObject.name}");
-            UpdateUI(type);
+            UpdateCounter();
         }
     }
 

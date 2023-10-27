@@ -6,12 +6,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Storage))]
 public class Converter : MonoBehaviour
 {
+    #region Поля
     [SerializeField] private string converterName = "Без имени";
     [SerializeField] private float workAmount = 1;
     [SerializeField] private float workSpeed = 1;
 
-    [SerializeField] private Storage[] importStorages;
-    [SerializeField] private Storage[] exportStorages;
     [SerializeField] private ConvertInfo[] convertCost;
     [SerializeField] private ConvertInfo[] convertResult;
 
@@ -19,7 +18,10 @@ public class Converter : MonoBehaviour
 
     [SerializeField] private Image progressBar;
     [SerializeField] private UpgradeArea upgradeArea;
-    [SerializeField] private ConverterUpgrader upgrader;
+
+    public Storage[] importStorages;
+    public Storage[] exportStorages;
+    public ConverterUpgrader upgrader;
     
     private float _workProgress;
 
@@ -34,12 +36,15 @@ public class Converter : MonoBehaviour
     private Storage _converterStorage;
 
     private Dictionary<ResourceType, int> _readyResources;
+    #endregion
 
+    #region События
     public delegate void ConverterHandler();
     public event ConverterHandler onConvertEnds;
     public event ConverterHandler onConvertStart;
     public event ConverterHandler onConverterReady;
     public event ConverterHandler onConvertChange;
+    #endregion
 
     private void Start()
     {
