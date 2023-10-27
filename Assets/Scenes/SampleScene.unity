@@ -128,6 +128,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 830152348431443020, guid: b58368c78875db4438121c61912fc518, type: 3}
   m_PrefabInstance: {fileID: 955154003741816818}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &48772364 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7951979440084967771, guid: b58368c78875db4438121c61912fc518, type: 3}
+  m_PrefabInstance: {fileID: 955154003741816818}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &221201287 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
@@ -5083,6 +5094,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 6197467462207181458, guid: b58368c78875db4438121c61912fc518, type: 3}
+      propertyPath: m_Name
+      value: Hint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6398814336982877102, guid: b58368c78875db4438121c61912fc518, type: 3}
+      propertyPath: m_Name
+      value: Description
+      objectReference: {fileID: 0}
     - target: {fileID: 6820998345975353407, guid: b58368c78875db4438121c61912fc518, type: 3}
       propertyPath: m_Camera
       value: 
@@ -5091,6 +5110,10 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 1451028252}
+    - target: {fileID: 7241986149296123933, guid: b58368c78875db4438121c61912fc518, type: 3}
+      propertyPath: descriptionPanel
+      value: 
+      objectReference: {fileID: 48772364}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5157,6 +5180,11 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 1451028252}
+    - target: {fileID: 2710377860294423561, guid: 3ebf59c8cfc370c46acbcaf2af2a20ca, type: 3}
+      propertyPath: UIName
+      value: "\u041F\u0430\u043D\u0435\u043B\u044C \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F
+        \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A\u0430"
+      objectReference: {fileID: 0}
     - target: {fileID: 3191424071128075236, guid: 3ebf59c8cfc370c46acbcaf2af2a20ca, type: 3}
       propertyPath: m_Camera
       value: 
@@ -5521,10 +5549,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9056827587215935340, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 963194227}
     - target: {fileID: 9075574860505099844, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

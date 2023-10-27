@@ -15,6 +15,9 @@ public abstract class InteractableObject : MonoBehaviour
     /// Аниматор панели описания
     /// </summary>
     [SerializeField] protected Animator descriptionAnim;
+    [SerializeField] protected TMPro.TMP_Text descriptionPanel;
+
+    protected abstract string Description { get; }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -54,10 +57,15 @@ public abstract class InteractableObject : MonoBehaviour
     {
         if (!descriptionAnim) {
             Debug.Log("Анимация описания не задана");
-            return;
+        } else {
+            descriptionAnim.SetBool("Show", active);
+            descriptionAnim.speed = 1;
         }
 
-        descriptionAnim.SetBool("Show", active);
-        descriptionAnim.speed = 1;
+        if (!descriptionPanel) {
+            Debug.Log("Панель описания не задана");
+        } else {
+            descriptionPanel.text = Description;
+        }
     }
 }

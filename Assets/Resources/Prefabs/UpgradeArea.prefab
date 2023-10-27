@@ -290,6 +290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptionAnim: {fileID: 1929963779029589931}
+  descriptionPanel: {fileID: 8981035579865177539}
+  UIName: 
   UI: {fileID: 0}
 --- !u!1 &3851690398445779351
 GameObject:
@@ -408,7 +410,7 @@ GameObject:
   - component: {fileID: 4683844598498752415}
   - component: {fileID: 737435349282798939}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Hint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,7 +635,7 @@ GameObject:
   - component: {fileID: 8169210172240164331}
   - component: {fileID: 8981035579865177539}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

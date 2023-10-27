@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class UIArea : InteractableObject
 {
+    [SerializeField, TextArea] protected string UIName;
     [SerializeField] protected Transform UI;
 
     private bool _isActive;
+
+    protected override string Description { get => $"Открыть {UIName}"; }
 
     public override void StartInteract(Carrier carrier = null)
     {

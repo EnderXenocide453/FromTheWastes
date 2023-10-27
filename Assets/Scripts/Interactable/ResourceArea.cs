@@ -8,11 +8,6 @@ using UnityEngine;
 [RequireComponent(typeof(Storage))]
 public class ResourceArea : InteractableObject
 {
-    /// <summary>
-    /// Хранилище этой зоны
-    /// </summary>
-    public Storage storage { get; private set; }
-
     [SerializeField] private bool isImport = true;
     [SerializeField] private float workAmount = 1;
 
@@ -20,6 +15,24 @@ public class ResourceArea : InteractableObject
     /// Корутины, размещенные относительно id вызвавшего их носильщика
     /// </summary>
     private Dictionary<int, Coroutine> _coroutines;
+
+    /// <summary>
+    /// Хранилище этой зоны
+    /// </summary>
+    public Storage storage { get; private set; }
+
+    protected override string Description { 
+        get
+        {
+            string action = isImport ? "Добавить" : "Взять";
+
+            string names = "";
+            foreach (var type in storage.GetResourceTypes())
+                names += $"|{ResourcesCollection.GetResource(type).name}| ";
+
+            return $"{action} ресурсы: {names}";
+        }
+    }
 
     private void Start()
     {
