@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameLoader : MonoBehaviour
 {
     private Dictionary<int, SaveItem> _saveItems;
-    private Dictionary<int, SaveInfo> _saveInfo;
+    private GlobalSaveObject _saveInfo;
     private int _count = 0;
     
     public delegate void LoaderHandler();
@@ -18,6 +18,7 @@ public class GameLoader : MonoBehaviour
     void Awake()
     {
         SaveItemCollector.Loader = this;
+        _saveInfo = new GlobalSaveObject();
     }
 
     [ContextMenu("LoadGame")]
@@ -35,21 +36,25 @@ public class GameLoader : MonoBehaviour
 
             FileStream file = File.Open(Application.persistentDataPath + "/save.dat", FileMode.Open);
 
-            _saveInfo = (Dictionary<int, SaveInfo>)bf.Deserialize(file);
+            _saveInfo = (GlobalSaveObject)bf.Deserialize(file);
 
             foreach (var item in _saveItems)
-                item.Value.Load(_saveInfo[item.Key]);
+                item.Value.Load(_saveInfo.saveInfo[item.Key]);
+
+            GlobalValues.Cash = _saveInfo.cash;
         }
     }
 
     [ContextMenu("SaveGame")]
     public void SaveGame()
     {
-        _saveInfo = new Dictionary<int, SaveInfo>();
+        _saveInfo.saveInfo = new Dictionary<int, SaveInfo>();
 
         foreach (var item in _saveItems) {
-            _saveInfo.Add(item.Key, item.Value.SaveInfo);
+            _saveInfo.saveInfo.Add(item.Key, item.Value.SaveInfo);
         }
+
+        _saveInfo.cash = GlobalValues.Cash;
 
         BinaryFormatter bf = new BinaryFormatter();
         SurrogateSelector ss = new SurrogateSelector();
@@ -74,6 +79,13 @@ public class GameLoader : MonoBehaviour
         _saveItems.Add(_count, item);
         //ѕрисваивание нового id и его инкремент
         item.saveID = _count++;
+    }
+
+    [System.Serializable]
+    private struct GlobalSaveObject
+    {
+        public Dictionary<int, SaveInfo> saveInfo;
+        public int cash;
     }
 }
 
