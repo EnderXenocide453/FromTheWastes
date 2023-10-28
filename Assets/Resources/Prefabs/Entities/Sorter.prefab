@@ -345,6 +345,7 @@ MonoBehaviour:
   endless: 0
   counter: {fileID: 0}
   resourceDisplay: {fileID: 0}
+  _count: 0
 --- !u!114 &3510627896293330248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,6 +584,7 @@ GameObject:
   - component: {fileID: 2803572639725406188}
   - component: {fileID: 9023990068028864954}
   - component: {fileID: 4133217617378540134}
+  - component: {fileID: 1537444397435443869}
   m_Layer: 0
   m_Name: Sorter
   m_TagString: Untagged
@@ -629,6 +631,7 @@ MonoBehaviour:
   endless: 1
   counter: {fileID: 0}
   resourceDisplay: {fileID: 0}
+  _count: 0
 --- !u!114 &4133217617378540134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,13 +647,6 @@ MonoBehaviour:
   converterName: "\u0411\u0435\u0437 \u0438\u043C\u0435\u043D\u0438"
   workAmount: 1
   workSpeed: 1
-  importStorages:
-  - {fileID: 7879230720256530505}
-  exportStorages:
-  - {fileID: 4088611271353978423}
-  - {fileID: 6713001141390395961}
-  - {fileID: 7771921314879596338}
-  - {fileID: 8624699266448634958}
   convertCost:
   - type: 0
     amount: 1
@@ -662,16 +658,22 @@ MonoBehaviour:
   employee: {fileID: 3510627896293330248}
   progressBar: {fileID: 9142593994889789941}
   upgradeArea: {fileID: 249777938181493999}
+  importStorages:
+  - {fileID: 7879230720256530505}
+  exportStorages:
+  - {fileID: 4088611271353978423}
+  - {fileID: 6713001141390395961}
+  - {fileID: 7771921314879596338}
+  - {fileID: 8624699266448634958}
   upgrader:
     converterUpgrade:
       name: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A"
       description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
         \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C"
-      baseCost: 2
-      costModifier: 0.2
+      baseCost: 100
+      costModifier: 0.25
       enabled: 1
-      currentLevel: 0
-      maxLevel: 2
+      maxLevel: 50
       storageCapacityMultiplier: 0.1
       workSpeedMultiplier: 0.1
     tierUpgrades:
@@ -748,12 +750,25 @@ MonoBehaviour:
       description: "\u0423\u0441\u043A\u043E\u0440\u044F\u0435\u0442 \u0440\u0430\u0431\u043E\u0442\u0443
         \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u044F\u0435\u0442 \u0445\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435"
       baseCost: 250
-      costModifier: 0.2
+      costModifier: 0.25
       enabled: 1
-      currentLevel: 0
       maxLevel: 25
       storageCapacityMultiplier: 0.2
       workSpeedMultiplier: 0.2
+--- !u!114 &1537444397435443869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310638631546737139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2ae366b542ba9409c18ae5d3cc4e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: 
+  saveID: 0
 --- !u!1 &8025065086818861128
 GameObject:
   m_ObjectHideFlags: 0
