@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class SaveItem : MonoBehaviour
 {
+    //Для первого сохранения
+    public string path;
+
     public int saveID;
 
     public abstract SaveInfo SaveInfo { get; }

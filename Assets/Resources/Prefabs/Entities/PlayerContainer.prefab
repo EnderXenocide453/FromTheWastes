@@ -466,6 +466,7 @@ GameObject:
   - component: {fileID: 1760648798350957848}
   - component: {fileID: 4300098173523294553}
   - component: {fileID: 7241986149296123933}
+  - component: {fileID: 8697463070392311535}
   m_Layer: 0
   m_Name: PlayerContainer
   m_TagString: Untagged
@@ -536,6 +537,21 @@ MonoBehaviour:
   UIName: "\u041C\u0435\u043D\u044E \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F
     \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430"
   UI: {fileID: 0}
+--- !u!114 &8697463070392311535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4688726251776778732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcfa46390a2856944bdc06842ff49397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: 
+  saveID: 0
+  player: {fileID: 556983509724312989}
 --- !u!1 &5503055264032693121
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +785,7 @@ MonoBehaviour:
   endless: 0
   counter: {fileID: 0}
   resourceDisplay: {fileID: 8110769787781997919}
+  _count: 0
 --- !u!114 &556983509724312989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,7 +814,6 @@ MonoBehaviour:
       baseCost: 200
       costModifier: 0.5
       enabled: 1
-      currentLevel: 0
       maxLevel: 10
       storageCapacityMultiplier: 0.1
       workSpeedMultiplier: 0.1

@@ -5,9 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Converter))]
 public class SaveConverter : SaveItem
 {
-    //Для первого сохранения
-    public string path;
-
     private Converter _converter;
 
     public override SaveInfo SaveInfo

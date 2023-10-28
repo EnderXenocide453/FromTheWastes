@@ -26,7 +26,7 @@ public abstract class Upgrade
     public void DoUpgrade()
     {
         PreUpgrade();
-        onUpgraded?.Invoke();
+        OnUpgraded();
         PostUpgrade();
     }
 
@@ -45,6 +45,11 @@ public abstract class Upgrade
 
     public abstract void PreUpgrade();
     public abstract void PostUpgrade();
+
+    protected virtual void OnUpgraded()
+    {
+        onUpgraded?.Invoke();
+    }
 }
 
 [Serializable]
@@ -99,6 +104,8 @@ public class CommonUpgrade : Upgrade
     {
         currentLevel = Mathf.Clamp(level, 0, maxLevel);
         _nextUpgrade = this;
+
+        OnUpgraded();
 
         PostUpgrade();
     }
@@ -266,6 +273,8 @@ public class PlayerUpgrader : Upgrader
 
     public override void UpgradeTo(int[] saveInfo)
     {
+        Init();
+
         upgrade.UpgradeTo(saveInfo[0]);
     }
 }

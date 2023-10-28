@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCarrier : Carrier
 {
-    [SerializeField] private PlayerUpgrader upgrader;
+    public PlayerUpgrader upgrader;
+
     [SerializeField] private UpgradeArea area;
 
     void Start()
