@@ -164,7 +164,7 @@ public class ConverterUpgrader : Upgrader
     [SerializeField] private TierUpgrade hireEmployee;
     [SerializeField] private CommonUpgrade employeeUpgrade;
 
-    private int _curTier;
+    private int _nextTier;
     private bool _hired;
 
     public event UpgraderHandler onConverterUpgrade;
@@ -172,7 +172,8 @@ public class ConverterUpgrader : Upgrader
     public event UpgraderHandler onHireEmployee;
     public event UpgraderHandler onEmployeeUpgrade;
 
-    public ConverterTierUpgrade CurrentTier { get => _curTier >= tierUpgrades.Length ? null : tierUpgrades[_curTier]; }
+    public ConverterTierUpgrade CurrentTier { get => (_nextTier >= tierUpgrades.Length || _nextTier < 0) ? null : tierUpgrades[_nextTier - 1]; }
+    public ConverterTierUpgrade NextTier { get => _nextTier >= tierUpgrades.Length ? null : tierUpgrades[_nextTier]; }
     public CommonUpgrade ConverterUpgrade { get => converterUpgrade.enabled ? converterUpgrade : null; }
     public CommonUpgrade EmployeeUpgrade { get => employeeUpgrade.enabled ? employeeUpgrade : null; }
 
@@ -183,7 +184,7 @@ public class ConverterUpgrader : Upgrader
             return new Upgrade[]
             {
                 ConverterUpgrade,
-                CurrentTier,
+                NextTier,
                 _hired ? EmployeeUpgrade : hireEmployee
             };
         }
@@ -193,7 +194,7 @@ public class ConverterUpgrader : Upgrader
         get => new int[]
         {
             converterUpgrade.currentLevel,
-            _curTier,
+            _nextTier,
             _hired ? employeeUpgrade.currentLevel : -1
         };
     }
@@ -209,6 +210,8 @@ public class ConverterUpgrader : Upgrader
         ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
         tier.onUpgraded += () => UpgradeTier();
 
+        _nextTier = 0;
+
         for (int i = 0; i < tierUpgrades.Length - 1; i++) {
             tier = tierUpgrades[i];
             tier.onUpgraded += () => UpgradeTier();
@@ -218,14 +221,15 @@ public class ConverterUpgrader : Upgrader
 
     public override void UpgradeTo(int[] saveInfo)
     {
+        Debug.Log(saveInfo[1]);
+
         Init();
 
         converterUpgrade.UpgradeTo(saveInfo[0]);
 
-        _curTier = 0;
-        int targetTier = saveInfo[1];
+        int curTier = saveInfo[1] - 1;
 
-        for (int i = 0; i < targetTier; i++)
+        for (int i = 0; i < curTier; i++)
             tierUpgrades[i].DoUpgrade();
 
         //Если работник не нанят выходим из метода
@@ -238,10 +242,9 @@ public class ConverterUpgrader : Upgrader
 
     private void UpgradeTier()
     {
-        Debug.Log("upgrade tier");
+        _nextTier++;
         onTierUpgrade?.Invoke();
-
-        _curTier++;
+        
     }
 
     private void HireEmployee()

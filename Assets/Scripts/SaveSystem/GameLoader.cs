@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class GameLoader : MonoBehaviour
 {
+    [SerializeField] private float autosaveDelay;
+    [SerializeField] private bool loadOnStart;
+
     private Dictionary<int, SaveItem> _saveItems;
     private GlobalSaveObject _saveInfo;
     private int _count = 0;
@@ -20,7 +23,15 @@ public class GameLoader : MonoBehaviour
         SaveItemCollector.Loader = this;
         _saveInfo = new GlobalSaveObject();
 
-        LoadGame();
+        if (loadOnStart)
+            LoadGame();
+
+        StartCoroutine(Autosave());
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
     }
 
     [ContextMenu("LoadGame")]
@@ -83,6 +94,15 @@ public class GameLoader : MonoBehaviour
         _saveItems.Add(_count, item);
         //ѕрисваивание нового id и его инкремент
         item.saveID = _count++;
+    }
+
+    private IEnumerator Autosave()
+    {
+        while (true) {
+            yield return new WaitForSeconds(autosaveDelay);
+
+            SaveGame();
+        }
     }
 
     [System.Serializable]

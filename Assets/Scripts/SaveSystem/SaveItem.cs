@@ -16,7 +16,9 @@ public abstract class SaveItem : MonoBehaviour
     protected virtual void Start()
     {
         SaveItemCollector.AddSaveItem(this);
-        Load(_loadInfo);
+
+        if (_loadInfo != null)
+            Load(_loadInfo);
     }
 
     public void SetLoadInfo(SaveInfo info)

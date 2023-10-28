@@ -197,7 +197,7 @@ public class Converter : MonoBehaviour
         upgradeArea.upgrader = upgrader;
 
         upgrader.onConverterUpgrade += Upgrade;
-        upgrader.onTierUpgrade += () => UpgradeTier(upgrader.CurrentTier);
+        upgrader.onTierUpgrade += () => UpgradeTier(upgrader.NextTier);
         upgrader.onEmployeeUpgrade += UpgradeEmployee;
     }
 

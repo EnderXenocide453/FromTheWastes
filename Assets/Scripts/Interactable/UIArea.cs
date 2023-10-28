@@ -11,6 +11,11 @@ public class UIArea : InteractableObject
 
     protected override string Description { get => $"Открыть {UIName}"; }
 
+    private void Start()
+    {
+        GlobalValues.handler.onPauseKeyDown += DisableUI;
+    }
+
     public override void StartInteract(Carrier carrier = null)
     {
         ToggleUI();

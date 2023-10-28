@@ -6,6 +6,7 @@ public class GlobalValuesHandler : MonoBehaviour
     public const string VertAxis = "Vertical";
 
     public KeyCode interactKey = KeyCode.E;
+    public KeyCode pauseKey = KeyCode.Escape;
 
     public Transform upgradePanel;
     public UpgradeUI upgradeUI;
@@ -16,6 +17,7 @@ public class GlobalValuesHandler : MonoBehaviour
 
     public event KeyHandler onInteractKeyDown;
     public event KeyHandler onInteractKeyUp;
+    public event KeyHandler onPauseKeyDown;
 
     [SerializeField] private TMPro.TMP_Text cashCounter;
 
@@ -46,6 +48,9 @@ public class GlobalValuesHandler : MonoBehaviour
             onInteractKeyDown?.Invoke();
         else if (Input.GetKeyUp(interactKey))
             onInteractKeyUp?.Invoke();
+
+        if (Input.GetKeyDown(pauseKey))
+            onPauseKeyDown?.Invoke();
     }
 }
 
