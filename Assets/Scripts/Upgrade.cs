@@ -219,7 +219,7 @@ public class ConverterUpgrader : Upgrader
         int targetTier = saveInfo[1];
 
         for (int i = 0; i < targetTier; i++)
-            UpgradeTier();
+            tierUpgrades[i].DoUpgrade();
 
         //Если работник не нанят выходим из метода
         if (saveInfo[2] < 0)
@@ -231,6 +231,7 @@ public class ConverterUpgrader : Upgrader
 
     private void UpgradeTier()
     {
+        Debug.Log("upgrade tier");
         onTierUpgrade?.Invoke();
 
         _curTier++;

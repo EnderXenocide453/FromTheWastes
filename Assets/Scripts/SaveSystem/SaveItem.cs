@@ -17,12 +17,12 @@ public abstract class SaveItem : MonoBehaviour
 }
 
 [System.Serializable]
-public struct SaveInfo
+public class SaveInfo
 {
     public string prefabPath;
-    public Vector3 position;
+    [SerializeField] public Vector3 position;
     public Quaternion rotation;
 
-    public Upgrader upgrader;
+    public int[] upgraderInfo;
     public Dictionary<ResourceType, int>[] storagesInfo;
 }

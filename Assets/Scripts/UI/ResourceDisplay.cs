@@ -18,8 +18,8 @@ public class ResourceDisplay : MonoBehaviour
     public void SetResource(ResourceType type, int count)
     {
         if (_resources == null)
-            _resources = new Dictionary<ResourceType, int>();
-
+            return;
+        
         if (!_resources.ContainsKey(type)) {
             _resources.TryAdd(type, 0);
             _rows.TryAdd(type, AddRow(type));

@@ -19,7 +19,7 @@ public class SaveConverter : SaveItem
             info.position = _converter.transform.position;
             info.rotation = _converter.transform.rotation;
             info.prefabPath = path;
-            info.upgrader = _converter.upgrader;
+            info.upgraderInfo = _converter.upgrader.SaveInfo;
 
             info.storagesInfo = new Dictionary<ResourceType, int>[_converter.importStorages.Length + _converter.exportStorages.Length];
             for (int i = 0; i < _converter.importStorages.Length; i++)
@@ -43,7 +43,7 @@ public class SaveConverter : SaveItem
     {
         _converter.transform.position = info.position;
         _converter.transform.rotation = info.rotation;
-        _converter.upgrader.UpgradeTo(info.upgrader.SaveInfo);
+        _converter.upgrader.UpgradeTo(info.upgraderInfo);
 
         for (int i = 0; i < _converter.importStorages.Length; i++) {
             if (info.storagesInfo[i] == null)
