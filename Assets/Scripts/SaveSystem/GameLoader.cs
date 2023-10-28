@@ -19,6 +19,8 @@ public class GameLoader : MonoBehaviour
     {
         SaveItemCollector.Loader = this;
         _saveInfo = new GlobalSaveObject();
+
+        LoadGame();
     }
 
     [ContextMenu("LoadGame")]
@@ -38,8 +40,10 @@ public class GameLoader : MonoBehaviour
 
             _saveInfo = (GlobalSaveObject)bf.Deserialize(file);
 
-            foreach (var item in _saveItems)
-                item.Value.Load(_saveInfo.saveInfo[item.Key]);
+            foreach (var item in _saveInfo.saveInfo) {
+                SaveItem newItem = Instantiate(Resources.Load<GameObject>(item.Value.prefabPath)).GetComponent<SaveItem>();
+                newItem.SetLoadInfo(_saveInfo.saveInfo[item.Key]);
+            }
 
             GlobalValues.Cash = _saveInfo.cash;
         }

@@ -31,12 +31,11 @@ public class SaveConverter : SaveItem
 
     protected override void Start()
     {
-        base.Start();
-
         _converter = GetComponent<Converter>();
+        base.Start();
     }
 
-    public override void Load(SaveInfo info)
+    protected override void Load(SaveInfo info)
     {
         _converter.transform.position = info.position;
         _converter.transform.rotation = info.rotation;

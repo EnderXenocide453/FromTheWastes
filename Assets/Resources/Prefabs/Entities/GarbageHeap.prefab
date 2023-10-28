@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1545630304602582126}
+  - component: {fileID: 2452037792251101926}
   m_Layer: 0
   m_Name: GarbageHeap
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2074803579969723827}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.25, y: 0, z: -9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33,6 +34,20 @@ Transform:
   - {fileID: 5630477857150735644}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2452037792251101926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074803579969723827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6391ec5b0e55adc4eb1ef23827e09c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Prefabs/Entities/GarbageHeap
+  saveID: 0
 --- !u!1 &4778126775729666372
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +76,7 @@ Transform:
   m_GameObject: {fileID: 4778126775729666372}
   serializedVersion: 2
   m_LocalRotation: {x: 0.27059805, y: 0.6532815, z: 0.27059805, w: 0.6532815}
-  m_LocalPosition: {x: 0, y: 0, z: -1.5}
+  m_LocalPosition: {x: 0, y: 0, z: -3.5}
   m_LocalScale: {x: 4, y: 4, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -340,7 +355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_LocalRotation.w

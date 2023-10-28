@@ -365,8 +365,8 @@ MonoBehaviour:
   moveSpeed: 5
   acceleration: 2
   rotationSpeed: 10
-  areaA: {fileID: 0}
-  areaB: {fileID: 4186038879798535790}
+  area: {fileID: 3717906404871167205}
+  target: {x: 5, y: -10, z: 0}
 --- !u!1 &2031310472599599901
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2ae366b542ba9409c18ae5d3cc4e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: 
+  path: Prefabs/Entities/Sorter
   saveID: 0
 --- !u!1 &8025065086818861128
 GameObject:
@@ -2839,17 +2839,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
   m_PrefabInstance: {fileID: 8469373505445144234}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4186038879798535790 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5737179630498218180, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
-  m_PrefabInstance: {fileID: 8469373505445144234}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e3e4da908a91404e975e94af8209662, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7879230720256530505 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1788462094116847331, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}

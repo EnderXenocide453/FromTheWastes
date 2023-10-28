@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9104480598873843643}
   - component: {fileID: 6579206176918496545}
   - component: {fileID: 6180542194662941981}
+  - component: {fileID: 126865758795146896}
   m_Layer: 0
   m_Name: Store
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5872231608191759805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 9.34}
+  m_LocalPosition: {x: 0, y: 0, z: 9.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -53,6 +54,7 @@ MonoBehaviour:
   endless: 1
   counter: {fileID: 0}
   resourceDisplay: {fileID: 0}
+  _count: 0
 --- !u!114 &6180542194662941981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +75,20 @@ MonoBehaviour:
     amount: 25
   - type: 7
     amount: 200
+--- !u!114 &126865758795146896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5872231608191759805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6391ec5b0e55adc4eb1ef23827e09c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Prefabs/Entities/Store
+  saveID: 0
 --- !u!1 &8871776233824445013
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 8871776233824445013}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,7 +384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5049074466233481807, guid: 60bbdecb303f60a41a4970f4a2ab305c, type: 3}
       propertyPath: m_LocalPosition.z

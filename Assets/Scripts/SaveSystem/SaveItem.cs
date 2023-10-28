@@ -9,14 +9,22 @@ public abstract class SaveItem : MonoBehaviour
 
     public int saveID;
 
+    private SaveInfo _loadInfo;
+
     public abstract SaveInfo SaveInfo { get; }
 
     protected virtual void Start()
     {
         SaveItemCollector.AddSaveItem(this);
+        Load(_loadInfo);
     }
 
-    public abstract void Load(SaveInfo info);
+    public void SetLoadInfo(SaveInfo info)
+    {
+        _loadInfo = info;
+    }
+
+    protected abstract void Load(SaveInfo info);
 }
 
 [System.Serializable]
