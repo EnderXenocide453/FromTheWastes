@@ -190,6 +190,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleWorker
       objectReference: {fileID: 0}
+    - target: {fileID: 6462023439894114556, guid: c2db25693f7a78f4995b94619f16755e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: af78bcffb3b5f034b97c05412ede25f7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
