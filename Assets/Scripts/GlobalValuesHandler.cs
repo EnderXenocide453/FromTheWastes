@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class GlobalValuesHandler : MonoBehaviour
 {
-    public const string HorAxis = "Horizontal";
-    public const string VertAxis = "Vertical";
-
     public KeyCode interactKey = KeyCode.E;
     public KeyCode pauseKey = KeyCode.Escape;
 
@@ -40,7 +37,7 @@ public class GlobalValuesHandler : MonoBehaviour
             cashCounter.text = $"{_cash}";
         }
     }
-    public Vector3 GetAxis() => new Vector3(Input.GetAxis(HorAxis), 0, Input.GetAxis(VertAxis));
+    public Vector3 GetAxis() => new Vector3(Input.GetAxis(GlobalValues.HorAxis), 0, Input.GetAxis(GlobalValues.VertAxis));
 
     private void Update()
     {
@@ -56,6 +53,13 @@ public class GlobalValuesHandler : MonoBehaviour
 
 public static class GlobalValues
 {
+    public const string HorAxis = "Horizontal";
+    public const string VertAxis = "Vertical";
+
+    public const string saveName = "save";
+    public const string newSaveName = "newGame";
+
+    public static bool newGame;
     public static GlobalValuesHandler handler;
 
     public static int Cash

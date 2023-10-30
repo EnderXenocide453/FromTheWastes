@@ -24,7 +24,7 @@ public class GameLoader : MonoBehaviour
         _saveInfo = new GlobalSaveObject();
 
         if (loadOnStart)
-            LoadGame();
+            LoadGame(GlobalValues.newGame ? GlobalValues.newSaveName : GlobalValues.saveName);
 
         StartCoroutine(Autosave());
     }
@@ -35,9 +35,9 @@ public class GameLoader : MonoBehaviour
     }
 
     [ContextMenu("LoadGame")]
-    public void LoadGame()
+    public void LoadGame(string name = GlobalValues.saveName)
     {
-        if (File.Exists(Application.persistentDataPath + "/save.dat")) {
+        if (File.Exists(Application.persistentDataPath + $"/{name}.dat")) {
             BinaryFormatter bf = new BinaryFormatter();
             SurrogateSelector ss = new SurrogateSelector();
             var streamingContext = new StreamingContext(StreamingContextStates.All);
@@ -47,7 +47,7 @@ public class GameLoader : MonoBehaviour
 
             bf.SurrogateSelector = ss;
 
-            FileStream file = File.Open(Application.persistentDataPath + "/save.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + $"/{name}.dat", FileMode.Open);
 
             _saveInfo = (GlobalSaveObject)bf.Deserialize(file);
 
@@ -61,7 +61,7 @@ public class GameLoader : MonoBehaviour
     }
 
     [ContextMenu("SaveGame")]
-    public void SaveGame()
+    public void SaveGame(string name = GlobalValues.saveName)
     {
         _saveInfo.saveInfo = new Dictionary<int, SaveInfo>();
 
@@ -80,7 +80,7 @@ public class GameLoader : MonoBehaviour
 
         bf.SurrogateSelector = ss;
 
-        FileStream file = File.Create(Application.persistentDataPath + "/save.dat");
+        FileStream file = File.Create(Application.persistentDataPath + $"/{name}.dat");
 
         bf.Serialize(file, _saveInfo);
         file.Close();
@@ -95,6 +95,14 @@ public class GameLoader : MonoBehaviour
         //ѕрисваивание нового id и его инкремент
         item.saveID = _count++;
     }
+
+    #if UNITY_EDITOR
+    [ContextMenu("Rewrite new game")]
+    public void SaveNewGame()
+    {
+        SaveGame(GlobalValues.newSaveName);
+    }
+    #endif
 
     private IEnumerator Autosave()
     {
