@@ -2613,6 +2613,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3985409559668983342, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985409559668983342, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.62
+      objectReference: {fileID: 0}
     - target: {fileID: 5213090592681103432, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
       propertyPath: area
       value: 
@@ -2635,7 +2643,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7060540529200132682, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7599284779075783693, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 7599284779075783693, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.92
       objectReference: {fileID: 0}
     - target: {fileID: 8953142134335942868, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
       propertyPath: resourceTypes.Array.data[0]

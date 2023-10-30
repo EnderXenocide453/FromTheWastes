@@ -207,6 +207,9 @@ public class ConverterUpgrader : Upgrader
 
         hireEmployee.onUpgraded += HireEmployee;
 
+        if (tierUpgrades.Length == 0)
+            return;
+
         ConverterTierUpgrade tier = tierUpgrades[tierUpgrades.Length - 1];
         tier.onUpgraded += () => UpgradeTier();
 

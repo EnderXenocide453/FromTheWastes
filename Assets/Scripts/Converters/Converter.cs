@@ -31,6 +31,10 @@ public class Converter : MonoBehaviour
     private int _level;
     private int _tier;
 
+    /// <summary>
+    /// Если правда, только поглощает ресурсы
+    /// </summary>
+    private bool _consumer = false;
     private bool _started;
 
     private Storage _converterStorage;
@@ -66,21 +70,22 @@ public class Converter : MonoBehaviour
             enabled = false;
             
             return;
-        } if (exportStorages == null || exportStorages.Length == 0) {
-            Debug.Log($"Зоны выхода ресурсов преобразователя {converterName} не назначены!");
-            enabled = false;
-
-            return;
-        } if (convertCost == null) {
+        }  if (convertCost == null) {
             Debug.Log($"Стоимость преобразования в {converterName} не назначена!");
             enabled = false;
 
             return;
-        } if (convertResult == null) {
+        } 
+        
+        if (exportStorages == null || exportStorages.Length == 0) {
+            Debug.Log($"Зоны выхода ресурсов преобразователя {converterName} не назначены!");
+            _consumer = true;
+            exportStorages = new Storage[0];
+        }
+        if (convertResult == null || convertResult.Length == 0) {
             Debug.Log($"Результат преобразования в {converterName} не назначена!");
-            enabled = false;
-
-            return;
+            _consumer = true;
+            convertResult = new ConvertInfo[0];
         }
     }
 
@@ -159,7 +164,8 @@ public class Converter : MonoBehaviour
             OnConvertEnds();
         }
 
-        progressBar.fillAmount = _workProgress / workAmount;
+        if (progressBar)
+            progressBar.fillAmount = _workProgress / workAmount;
     }
 
     private void OnConvertEnds()
@@ -174,6 +180,9 @@ public class Converter : MonoBehaviour
 
     private void SendResult()
     {
+        if (_consumer)
+            return;
+
         foreach(var result in CalculateResult()) {
             int remains = result.amount;
 
@@ -208,6 +217,7 @@ public class Converter : MonoBehaviour
         
         foreach (var storage in importStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
+
         foreach (var storage in exportStorages)
             storage.SetCapacityMultiplier(_capacityMultiplier);
 
@@ -218,6 +228,9 @@ public class Converter : MonoBehaviour
     {
         convertCost = tier.tierConvertCost;
         convertResult = tier.tierConvertResult;
+
+        //Если результата нет, ресурсы только поглощаются
+        _consumer = convertResult == null;
 
         onConvertChange?.Invoke();
 

@@ -1408,18 +1408,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1267422449927737613, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.79
-      objectReference: {fileID: 0}
-    - target: {fileID: 1267422449927737613, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 1809544408378175306, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2553337592539469988, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1459,14 +1447,6 @@ PrefabInstance:
     - target: {fileID: 2803572639725406188, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5742049803547712302, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 5742049803547712302, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5.62
       objectReference: {fileID: 0}
     - target: {fileID: 7310638631546737139, guid: ccbdb29942b992c4585a60cf9173e0b8, type: 3}
       propertyPath: m_Name
@@ -1890,25 +1870,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4310878013243870304, guid: 72fd9d812f5b97a448d2cf46d7ed0abe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 4310878013243870304, guid: 72fd9d812f5b97a448d2cf46d7ed0abe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.38
-      objectReference: {fileID: 0}
     - target: {fileID: 5305967881127705335, guid: 72fd9d812f5b97a448d2cf46d7ed0abe, type: 3}
       propertyPath: m_Name
       value: Smelter
-      objectReference: {fileID: 0}
-    - target: {fileID: 7343754065402988099, guid: 72fd9d812f5b97a448d2cf46d7ed0abe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.79
-      objectReference: {fileID: 0}
-    - target: {fileID: 7343754065402988099, guid: 72fd9d812f5b97a448d2cf46d7ed0abe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.62
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1980,6 +1944,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3612987185036975238, guid: 159745e93c9c0ee4b81260a73b66d389, type: 3}
+      propertyPath: endless
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7586880451819672890, guid: 159745e93c9c0ee4b81260a73b66d389, type: 3}
       propertyPath: m_Name
       value: Incinerator
