@@ -60,6 +60,8 @@ public class Storage : MonoBehaviour
     /// </summary>
     public event StorageEventHandler onStorageEmptied;
 
+    public event StorageEventHandler onSendEnds;
+
     public int Capacity
     {
         get => Mathf.RoundToInt(_capacityMultiplier * capacity);
@@ -206,8 +208,10 @@ public class Storage : MonoBehaviour
         int verified = VerifyResourceChange(type, count);
 
         //≈сли ресурс не может быть передан, возвращаем 0
-        if (verified == 0)
+        if (verified == 0) {
+            onSendEnds?.Invoke(null);
             return 0;
+        }
 
         _count += verified;
         _resources[type].count += verified;

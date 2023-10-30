@@ -8,7 +8,8 @@ using UnityEngine;
 public class GameLoader : MonoBehaviour
 {
     [SerializeField] private float autosaveDelay;
-    [SerializeField] private bool loadOnStart;
+    [SerializeField] private bool loadOnStart = true;
+    [SerializeField] private bool autosave = true;
 
     private Dictionary<int, SaveItem> _saveItems;
     private GlobalSaveObject _saveInfo;
@@ -26,12 +27,14 @@ public class GameLoader : MonoBehaviour
         if (loadOnStart)
             LoadGame(GlobalValues.newGame ? GlobalValues.newSaveName : GlobalValues.saveName);
 
-        StartCoroutine(Autosave());
+        if (autosave)
+            StartCoroutine(Autosave());
     }
 
     private void OnApplicationQuit()
     {
-        SaveGame();
+        if (autosave)
+            SaveGame();
     }
 
     [ContextMenu("LoadGame")]

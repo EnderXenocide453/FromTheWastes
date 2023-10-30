@@ -236,7 +236,7 @@ public class ConverterUpgrader : Upgrader
         if (saveInfo[2] < 0)
             return;
 
-        HireEmployee();
+        hireEmployee.DoUpgrade();
         employeeUpgrade.UpgradeTo(saveInfo[2]);
     }
 

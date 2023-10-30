@@ -689,8 +689,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056007a429af6bf44ae1b5b5dd6ea1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autosaveDelay: 20000
+  autosaveDelay: 120
   loadOnStart: 1
+  autosave: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

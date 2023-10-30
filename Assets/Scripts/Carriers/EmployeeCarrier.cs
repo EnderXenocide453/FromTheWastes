@@ -5,27 +5,22 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class EmployeeCarrier : Carrier
 {
-    [SerializeField] private Transform area;
-    [SerializeField] private Vector3 target;
-
-    private Vector3 _targetA, _targetB;
+    [SerializeField] private Transform targetA, targetB;
 
     private bool _stop;
 
     private void Start()
     {
-        _targetA = target;
-        _targetB = area.position;
-
         onEnterInteractable += StartWork;
 
         storage.onStorageFilled += (object obj) => FinishWork();
         storage.onStorageEmptied += (object obj) => FinishWork();
+        storage.onSendEnds += (object obj) => FinishWork();
     }
 
     protected override void GetDirection()
     {
-        moveDir = _stop ? Vector3.zero : (_targetA - transform.position).normalized;
+        moveDir = _stop ? Vector3.zero : (targetA.position - transform.position).normalized;
     }
 
     private void StartWork()
@@ -38,7 +33,7 @@ public class EmployeeCarrier : Carrier
     private void FinishWork()
     {
         _stop = false;
-        (_targetA, _targetB) = (_targetB, _targetA);
+        (targetA, targetB) = (targetB, targetA);
 
         StopInteract();
     }
