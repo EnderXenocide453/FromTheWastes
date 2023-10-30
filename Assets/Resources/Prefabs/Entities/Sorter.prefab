@@ -292,24 +292,6 @@ MonoBehaviour:
       storageCapacityMultiplier: 0.1
       workSpeedMultiplier: 0.1
     tierUpgrades:
-    - name: "\u041F\u043E\u0441\u0442\u0440\u043E\u0438\u0442\u044C \u0441\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A"
-      description: "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0449\u0438\u043A
-        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u0435\u0442 \u043D\u0430\u0439\u0442\u0438
-        \u0441\u0440\u0435\u0434\u0438 \u043C\u0443\u0441\u043E\u0440\u0430 \u043F\u043E\u043B\u0435\u0437\u043D\u044B\u0435
-        \u0432\u0435\u0449\u0438"
-      baseCost: 0
-      costModifier: 0
-      enabled: 1
-      tierParts:
-      - {fileID: 1097843941317783657}
-      tierConvertCost:
-      - type: 0
-        amount: 1
-      tierConvertResult:
-      - type: 1
-        amount: 1
-      - type: 2
-        amount: 2
     - name: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0430\u043B\u0433\u043E\u0440\u0438\u0442\u043C\u044B"
       description: "\u041F\u043E\u0437\u0432\u043E\u043B\u044F\u0435\u0442 \u043D\u0430\u0439\u0442\u0438
         \u0441\u0440\u0435\u0434\u0438 \u043C\u0443\u0441\u043E\u0440\u0430 \u043F\u043E\u0432\u0440\u0435\u0436\u0434\u0435\u043D\u043D\u044B\u0435
@@ -2653,6 +2635,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7060540529200132682, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8953142134335942868, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: resourceTypes.Array.data[0]
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

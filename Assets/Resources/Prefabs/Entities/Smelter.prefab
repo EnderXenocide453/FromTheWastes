@@ -413,6 +413,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Employee
       objectReference: {fileID: 0}
+    - target: {fileID: 8953142134335942868, guid: 620533eb193e15049abecbe7ad5c3455, type: 3}
+      propertyPath: resourceTypes.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -96,8 +96,10 @@ public class Storage : MonoBehaviour
     public int SendResource(Storage other, ResourceType type, int sendCount = 1)
     {
         //ѕроверка возможности обращени€ к ресурсу и наличи€ свободного места
-        if (!_resources.ContainsKey(type) || other.filled)
+        if (!_resources.ContainsKey(type) || !other._resources.ContainsKey(type) || other.filled) {
+            onSendEnds?.Invoke(null);
             return 0;
+        }
 
         //≈сли ресурсы бесконечны, оставл€ем количество без изменений.
         //»наче, если ресурс есть в хранилище, ограничиваем его максимальным значением. ≈сли ресурса нет, отправка не осуществл€етс€
