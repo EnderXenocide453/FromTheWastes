@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class HintArea : InteractableObject
 {
-    protected override string Description => throw new System.NotImplementedException();
+    [SerializeField, TextArea] string hint;
 
-    public override void StartInteract(Carrier carrier = null)
-    {
-        throw new System.NotImplementedException();
-    }
+    protected override string Description { get => hint; }
 
-    public override void StopInteract(Carrier carrier = null)
-    {
-        throw new System.NotImplementedException();
-    }
+    public override void StartInteract(Carrier carrier = null) { }
+
+    public override void StopInteract(Carrier carrier = null) { }
 }
