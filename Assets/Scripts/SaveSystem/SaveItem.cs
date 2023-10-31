@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Класс объекта сохранения
+/// </summary>
 public abstract class SaveItem : MonoBehaviour
 {
-    //Для первого сохранения
     public string path;
-
     public int saveID;
 
     private SaveInfo _loadInfo;
@@ -15,20 +16,33 @@ public abstract class SaveItem : MonoBehaviour
 
     protected virtual void Start()
     {
+        //После появления добвляется в список объектов сохранения загрузчика
         SaveItemCollector.AddSaveItem(this);
 
+        //Если есть что загружать, загружаем
         if (_loadInfo != null)
             Load(_loadInfo);
     }
 
+    /// <summary>
+    /// Установить информацию загрузки
+    /// </summary>
+    /// <param name="info">Состояние объекта для загрузки</param>
     public void SetLoadInfo(SaveInfo info)
     {
         _loadInfo = info;
     }
 
+    /// <summary>
+    /// Загрузить состояние
+    /// </summary>
+    /// <param name="info">Состояние</param>
     protected abstract void Load(SaveInfo info);
 }
 
+/// <summary>
+/// Состояние объекта сохранения
+/// </summary>
 [System.Serializable]
 public class SaveInfo
 {

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Объект сохранения состояния игрока
+/// </summary>
 public class SavePlayer : SaveItem
 {
     [SerializeField] private PlayerCarrier player;

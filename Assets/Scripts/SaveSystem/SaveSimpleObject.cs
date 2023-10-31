@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Объект сохранения простого объекта
+/// </summary>
 public class SaveSimpleObject : SaveItem
 {
     public override SaveInfo SaveInfo

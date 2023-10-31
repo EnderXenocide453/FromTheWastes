@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Анимация передачи ресурса
+/// </summary>
 public class ResourceAnimation : MonoBehaviour
 {
     [SerializeField] private float speed = 2;
@@ -16,6 +19,10 @@ public class ResourceAnimation : MonoBehaviour
         StartCoroutine(Move());
     }
 
+    /// <summary>
+    /// Движение ресурса к заданной точке
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Move()
     {
         while (Vector3.Distance(transform.position, _target.position) > 0.05f) {

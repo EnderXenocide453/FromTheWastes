@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Преобразователь ресурсов
+/// </summary>
 [RequireComponent(typeof(Storage))]
 public class Converter : MonoBehaviour
 {
@@ -63,6 +66,9 @@ public class Converter : MonoBehaviour
             Convert(Time.fixedDeltaTime);
     }
 
+    /// <summary>
+    /// Проверка правильности заданных данных
+    /// </summary>
     private void ValidateResources()
     {
         if (importStorages == null || importStorages.Length == 0) {
@@ -89,6 +95,9 @@ public class Converter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Инициализация хранилищ
+    /// </summary>
     private void InitStorage()
     {
         _readyResources = new Dictionary<ResourceType, int>();
@@ -107,6 +116,10 @@ public class Converter : MonoBehaviour
             };
     }
 
+    /// <summary>
+    /// Метод отлавливания изменений ресурсов
+    /// </summary>
+    /// <param name="change">Тип ресурса и число, на которое изменилось его колитчество</param>
     private void HandleResourceChange((ResourceType type, int count) change)
     {
         if (!_readyResources.ContainsKey(change.type))
@@ -116,6 +129,9 @@ public class Converter : MonoBehaviour
         CheckReadiness();
     }
 
+    /// <summary>
+    /// Проверить готовность к преобразованию
+    /// </summary>
     private void CheckReadiness()
     {
         foreach (var cost in convertCost)
@@ -130,6 +146,9 @@ public class Converter : MonoBehaviour
         StartConvertation();
     }
 
+    /// <summary>
+    /// Начать преобразование
+    /// </summary>
     private void StartConvertation()
     {
         if (_started) return;
@@ -141,6 +160,9 @@ public class Converter : MonoBehaviour
         onConvertStart?.Invoke();
     }
 
+    /// <summary>
+    /// Поглотить ресурсы из входных хранилищ 
+    /// </summary>
     private void ConsumeCost()
     {
         foreach (var cost in convertCost) {
@@ -155,6 +177,10 @@ public class Converter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Сделать шаг преобразования
+    /// </summary>
+    /// <param name="delta">Длина шага</param>
     private void Convert(float delta)
     {
         _workProgress += workSpeed * _workSpeedMultiplier * delta;
@@ -168,6 +194,9 @@ public class Converter : MonoBehaviour
             progressBar.fillAmount = _workProgress / workAmount;
     }
 
+    /// <summary>
+    /// Вызывается, когда конвертация окончена
+    /// </summary>
     private void OnConvertEnds()
     {
         SendResult();
@@ -178,6 +207,9 @@ public class Converter : MonoBehaviour
         onConvertEnds?.Invoke();
     }
 
+    /// <summary>
+    /// Отправить результат конвертации в выходные хранилища
+    /// </summary>
     private void SendResult()
     {
         if (_consumer)
@@ -195,11 +227,18 @@ public class Converter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Рассчитать результат преобразования
+    /// </summary>
+    /// <returns>Результат преобразования</returns>
     protected virtual ConvertInfo[] CalculateResult()
     {
         return convertResult;
     }
 
+    /// <summary>
+    /// Инициализация улучшений
+    /// </summary>
     private void InitUpgrades()
     {
         upgrader.Init();
@@ -210,6 +249,9 @@ public class Converter : MonoBehaviour
         upgrader.onEmployeeUpgrade += UpgradeEmployee;
     }
 
+    /// <summary>
+    /// Вычислить показатели преобразователя
+    /// </summary>
     private void Upgrade()
     {
         _workSpeedMultiplier = upgrader.ConverterUpgrade.WorkSpeedMultiplier;
@@ -224,6 +266,10 @@ public class Converter : MonoBehaviour
         _level++;
     }
 
+    /// <summary>
+    /// Применить улучшение круга
+    /// </summary>
+    /// <param name="tier">Улучшение</param>
     private void UpgradeTier(ConverterTierUpgrade tier)
     {
         convertCost = tier.tierConvertCost;
@@ -237,6 +283,9 @@ public class Converter : MonoBehaviour
         _tier++;
     }
 
+    /// <summary>
+    /// Применить улучшение работника
+    /// </summary>
     private void UpgradeEmployee()
     {
         employee.SetCapacityModifier(upgrader.EmployeeUpgrade.StorageCapacityMultiplier);

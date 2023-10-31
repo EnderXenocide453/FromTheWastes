@@ -7,7 +7,13 @@ using UnityEngine;
 /// </summary>
 public class Storage : MonoBehaviour
 {
+    /// <summary>
+    /// Может ли содержать любой ресурс
+    /// </summary>
     public bool handleEverything;
+    /// <summary>
+    /// Заполнен ли полностью
+    /// </summary>
     public bool filled { get; private set; }
 
     /// <summary>
@@ -67,6 +73,9 @@ public class Storage : MonoBehaviour
         get => Mathf.RoundToInt(_capacityMultiplier * capacity);
     }
 
+    /// <summary>
+    /// Количество всех ресурсов
+    /// </summary>
     public Dictionary<ResourceType, int> ResourcesCount { 
         get
         {
@@ -128,6 +137,10 @@ public class Storage : MonoBehaviour
         return 0;
     }
 
+    /// <summary>
+    /// Получить типы хранимых ресурсов
+    /// </summary>
+    /// <returns>Типы ресурсов</returns>
     public ResourceType[] GetResourceTypes()
     {
         ResourceType[] res = new ResourceType[resourceTypes.Length];
@@ -136,6 +149,11 @@ public class Storage : MonoBehaviour
         return res;
     }
 
+    /// <summary>
+    /// Вычислить корелляцию ресурсов хранилищ
+    /// </summary>
+    /// <param name="other">Другое хранилище</param>
+    /// <returns>Массив типов ресурсов</returns>
     public ResourceType[] FindIdentity(Storage other)
     {
         (ResourceType[] min, ResourceType[] max) = resourceTypes.Length > other.resourceTypes.Length ? (other.resourceTypes, resourceTypes) : (resourceTypes, other.resourceTypes);
@@ -151,6 +169,10 @@ public class Storage : MonoBehaviour
         return types.ToArray();
     }
 
+    /// <summary>
+    /// Установить множитель размера хранилища
+    /// </summary>
+    /// <param name="multiplier">Множитель</param>
     public void SetCapacityMultiplier(float multiplier)
     {
         _capacityMultiplier = multiplier;
@@ -272,18 +294,30 @@ public class Storage : MonoBehaviour
         return count;
     }
 
+    /// <summary>
+    /// Обновить UI хранилища
+    /// </summary>
+    /// <param name="type">тип ресурса</param>
     private void UpdateUI(ResourceType type)
     {
         UpdateCounter();
         resourceDisplay?.SetResource(type, GetResourceCount(type));
     }
 
+    /// <summary>
+    /// Обновить счетчик ресурсов
+    /// </summary>
     private void UpdateCounter()
     {
         if (counter)
             counter.text = $"{_count}/{Capacity}";
     }
 
+    /// <summary>
+    /// Анимировать отправку ресурса
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="sended"></param>
     private void AnimateSend(Transform target, Resource sended)
     {
         ResourceAnimation res = Instantiate(Resources.Load<GameObject>(sended.prefabPath), transform.position, Quaternion.identity).GetComponent<ResourceAnimation>();

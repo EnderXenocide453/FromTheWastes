@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Отлавливатель глобальных данных
+/// </summary>
 public class GlobalValuesHandler : MonoBehaviour
 {
     public KeyCode interactKey = KeyCode.E;
@@ -51,6 +54,9 @@ public class GlobalValuesHandler : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Хранилище глобальных данных
+/// </summary>
 public static class GlobalValues
 {
     public const string HorAxis = "Horizontal";
@@ -62,12 +68,20 @@ public static class GlobalValues
     public static bool newGame;
     public static GlobalValuesHandler handler;
 
+    /// <summary>
+    /// Текущее количество денег игрока
+    /// </summary>
     public static int Cash
     {
         get => handler.Cash;
         set => handler.Cash = value;
     }
 
+    /// <summary>
+    /// Вывести сообщение на экран
+    /// </summary>
+    /// <param name="text">Текст сообщения</param>
+    /// <param name="color">Цвет текста</param>
     public static void Alert(string text, Color color) => handler?.alertPanel.Alert(text, color);
 
 }

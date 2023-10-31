@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Объект сохранения преобразователя
+/// </summary>
 [RequireComponent(typeof(Converter))]
 public class SaveConverter : SaveItem
 {
     private Converter _converter;
 
+    //При сохранении записываем данные преобразователя
     public override SaveInfo SaveInfo
     {
         get
@@ -35,6 +39,7 @@ public class SaveConverter : SaveItem
         base.Start();
     }
 
+    //При загрузке устанавливаем данные преобразователя
     protected override void Load(SaveInfo info)
     {
         _converter.transform.position = info.position;

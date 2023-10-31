@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Сортировщик
+/// </summary>
 public class Sorter : Converter
 {
     private int _weightSum;
@@ -13,6 +16,7 @@ public class Sorter : Converter
         onConvertChange += CalculateSum;
     }
 
+    //Вместо преобразования из стоимости в результат, расчитывается вероятность результата исходя из весов, указанных в нем
     protected override ConvertInfo[] CalculateResult()
     {
         float point = Random.Range(0f, _weightSum);
@@ -31,6 +35,9 @@ public class Sorter : Converter
         return new ConvertInfo[] { result };
     }
 
+    /// <summary>
+    /// Расчет суммы весов
+    /// </summary>
     private void CalculateSum()
     {
         _weightSum = 0;

@@ -11,6 +11,9 @@ public class UpgradeUI : MonoBehaviour
     private int _counter;
     private Dictionary<int, UpgradeRow> _rows;
 
+    /// <summary>
+    /// Очистить UI
+    /// </summary>
     public void ClearUI()
     {
         _counter = 0;
@@ -22,12 +25,20 @@ public class UpgradeUI : MonoBehaviour
         _rows = new Dictionary<int, UpgradeRow>();
     }
 
+    /// <summary>
+    /// Добавить коллекцию улучшений
+    /// </summary>
+    /// <param name="upgrades">Массив улучшений</param>
     public void AddUpgrades(Upgrade[] upgrades)
     {
         foreach (var upgrade in upgrades)
             AddUpgrade(upgrade);
     }
 
+    /// <summary>
+    /// Добавить улучшение
+    /// </summary>
+    /// <param name="upgrade">Улучшение</param>
     public void AddUpgrade(Upgrade upgrade)
     {
         if (upgrade == null)
@@ -49,6 +60,11 @@ public class UpgradeUI : MonoBehaviour
         _counter++;
     }
 
+    /// <summary>
+    /// Осуществить улучшение
+    /// </summary>
+    /// <param name="id">ID улучшения</param>
+    /// <param name="upgrade">Ссылка на улучшение</param>
     private void DoUpgrade(int id, Upgrade upgrade)
     {
         if (GlobalValues.Cash < upgrade.Cost) {
@@ -64,6 +80,10 @@ public class UpgradeUI : MonoBehaviour
         AddUpgrade(upgrade.Next);
     }
 
+    /// <summary>
+    /// Удалить улучшение
+    /// </summary>
+    /// <param name="id">ID улучшения</param>
     private void RemoveUpgrade(int id)
     {
         Destroy(_rows[id].gameObject);

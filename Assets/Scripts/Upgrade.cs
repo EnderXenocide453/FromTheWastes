@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 #region Улучшения
+/// <summary>
+/// Базовый класс улучшения
+/// </summary>
 [System.Serializable]
 public abstract class Upgrade
 {
@@ -23,6 +26,9 @@ public abstract class Upgrade
     public abstract string Name { get; }
     public abstract Upgrade Next { get; }
     
+    /// <summary>
+    /// Произвести улучшение
+    /// </summary>
     public void DoUpgrade()
     {
         PreUpgrade();
@@ -30,6 +36,10 @@ public abstract class Upgrade
         PostUpgrade();
     }
 
+    /// <summary>
+    /// Установить улучшение как следующее за этим
+    /// </summary>
+    /// <param name="next">Следующее улучшение</param>
     public void SetNext(Upgrade next)
     {
         _nextUpgrade = next;
@@ -43,15 +53,27 @@ public abstract class Upgrade
         onUpgraded = null;
     }
 
+    /// <summary>
+    /// Действия перед улучшением
+    /// </summary>
     public abstract void PreUpgrade();
+    /// <summary>
+    /// Действия после улучшения
+    /// </summary>
     public abstract void PostUpgrade();
 
+    /// <summary>
+    /// Вызывается при произведении улучшения
+    /// </summary>
     protected virtual void OnUpgraded()
     {
         onUpgraded?.Invoke();
     }
 }
 
+/// <summary>
+/// Класс поуровневого улучшения сущности
+/// </summary>
 [Serializable]
 public class CommonUpgrade : Upgrade
 {
@@ -100,6 +122,10 @@ public class CommonUpgrade : Upgrade
         onMaxLevel?.Invoke();
     }
 
+    /// <summary>
+    /// Улучшение до заданного уровня
+    /// </summary>
+    /// <param name="level"></param>
     public void UpgradeTo(int level)
     {
         currentLevel = Mathf.Clamp(level, 0, maxLevel);
@@ -111,9 +137,15 @@ public class CommonUpgrade : Upgrade
     }
 }
 
+/// <summary>
+/// Класс улучшения по кругам/тирам. Активирует скрытые объекты
+/// </summary>
 [Serializable]
 public class TierUpgrade : Upgrade
 {
+    /// <summary>
+    /// Объекты, открываемые при улучшении
+    /// </summary>
     public Transform[] tierParts;
     public override int Cost { get => baseCost; }
     public override string Description { get => description; }
@@ -132,6 +164,9 @@ public class TierUpgrade : Upgrade
     }
 }
 
+/// <summary>
+/// Подкласс улучшения по тирам. Меняет производственные данные преобразователя
+/// </summary>
 [Serializable]
 public class ConverterTierUpgrade : TierUpgrade
 {
@@ -141,10 +176,19 @@ public class ConverterTierUpgrade : TierUpgrade
 #endregion
 
 #region Контроллеры улучшений
+/// <summary>
+/// Базовый класс контроллера улучшений. Хранит данные об улучшении
+/// </summary>
 [System.Serializable]
 public abstract class Upgrader
 {
+    /// <summary>
+    /// Доступные в данный момент улучшения
+    /// </summary>
     public abstract Upgrade[] CurrentUpgrades { get; }
+    /// <summary>
+    /// Состояние контроллера для сохранения
+    /// </summary>
     public abstract int[] SaveInfo { get; }
 
     public delegate void UpgraderHandler();
@@ -153,9 +197,16 @@ public abstract class Upgrader
     /// Инициализация улучшений
     /// </summary>
     public abstract void Init();
+    /// <summary>
+    /// Улучшить до указанного состояния
+    /// </summary>
+    /// <param name="saveInfo"></param>
     public abstract void UpgradeTo(int[] saveInfo);
 }
 
+/// <summary>
+/// Контроллер улучшений преобразователя
+/// </summary>
 [System.Serializable]
 public class ConverterUpgrader : Upgrader
 {
@@ -243,6 +294,9 @@ public class ConverterUpgrader : Upgrader
         employeeUpgrade.UpgradeTo(saveInfo[2]);
     }
 
+    /// <summary>
+    /// Улучшить круг
+    /// </summary>
     private void UpgradeTier()
     {
         _nextTier++;
@@ -250,6 +304,9 @@ public class ConverterUpgrader : Upgrader
         
     }
 
+    /// <summary>
+    /// Нанять работника
+    /// </summary>
     private void HireEmployee()
     {
         hireEmployee.SetNext(employeeUpgrade);
@@ -259,6 +316,9 @@ public class ConverterUpgrader : Upgrader
     }
 }
 
+/// <summary>
+/// Класс контроллера улучшений персонажа игрока
+/// </summary>
 [System.Serializable]
 public class PlayerUpgrader : Upgrader
 {

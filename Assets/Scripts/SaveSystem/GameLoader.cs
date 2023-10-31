@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+/// <summary>
+/// Контроллер сохранения и загрузки игры
+/// </summary>
 public class GameLoader : MonoBehaviour
 {
     [SerializeField] private float autosaveDelay;
@@ -39,7 +42,10 @@ public class GameLoader : MonoBehaviour
             SaveGame();
     }
 
-    [ContextMenu("LoadGame")]
+    /// <summary>
+    /// Загрузить игру
+    /// </summary>
+    /// <param name="name">Имя файла сохранения</param>
     public void LoadGame(string name = GlobalValues.saveName)
     {
         if (File.Exists(Application.persistentDataPath + $"/{name}.dat")) {
@@ -66,7 +72,10 @@ public class GameLoader : MonoBehaviour
         }
     }
 
-    [ContextMenu("SaveGame")]
+    /// <summary>
+    /// Сохранить игру
+    /// </summary>
+    /// <param name="name">имя сохранения</param>
     public void SaveGame(string name = GlobalValues.saveName)
     {
         _saveInfo.saveInfo = new Dictionary<int, SaveInfo>();
@@ -92,6 +101,10 @@ public class GameLoader : MonoBehaviour
         file.Close();
     }
 
+    /// <summary>
+    /// Добавить объект сохранения
+    /// </summary>
+    /// <param name="item"></param>
     public void AddSaveItem(SaveItem item)
     {
         if (_saveItems == null)
@@ -103,6 +116,9 @@ public class GameLoader : MonoBehaviour
     }
 
     #if UNITY_EDITOR
+    /// <summary>
+    /// Сохранение состояния игры в качестве начального
+    /// </summary>
     [ContextMenu("Rewrite new game")]
     public void SaveNewGame()
     {
@@ -110,6 +126,10 @@ public class GameLoader : MonoBehaviour
     }
     #endif
 
+    /// <summary>
+    /// Автоматическое сохранение
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Autosave()
     {
         while (true) {
@@ -119,6 +139,9 @@ public class GameLoader : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Структура объекта сохранения
+    /// </summary>
     [System.Serializable]
     private struct GlobalSaveObject
     {
@@ -127,6 +150,9 @@ public class GameLoader : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Статический класс для обращения к загрузчику из любого участка кода
+/// </summary>
 public static class SaveItemCollector
 {
     public static GameLoader Loader { 
@@ -147,6 +173,9 @@ public static class SaveItemCollector
     }
 }
 
+/// <summary>
+/// Класс для сериализации векторов
+/// </summary>
 public class Vector3SerializationSurrogate : ISerializationSurrogate
 {
     public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
@@ -168,6 +197,9 @@ public class Vector3SerializationSurrogate : ISerializationSurrogate
     }
 }
 
+/// <summary>
+/// Класс для сериализации кватернионов
+/// </summary>
 public class QuaternionSerializationSurrogate : ISerializationSurrogate
 {
     public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)

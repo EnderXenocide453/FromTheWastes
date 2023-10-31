@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Панель оповещений
+/// </summary>
 public class AlertPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text alertText;
@@ -17,6 +20,11 @@ public class AlertPanel : MonoBehaviour
             alertText = GetComponent<TMP_Text>();
     }
 
+    /// <summary>
+    /// Вывести сообщение на экран
+    /// </summary>
+    /// <param name="text">Текст сообщения</param>
+    /// <param name="color">Цвет сообщения</param>
     public void Alert(string text, Color color)
     {
         if (_fading != null)
@@ -28,6 +36,10 @@ public class AlertPanel : MonoBehaviour
         _fading = StartCoroutine(Fade());
     }
 
+    /// <summary>
+    /// Постепенное исчезновение сообщения
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Fade()
     {
         float alpha = 1;

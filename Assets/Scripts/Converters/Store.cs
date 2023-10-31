@@ -1,18 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Магазин
+/// </summary>
 [RequireComponent(typeof(Storage))]
 public class Store : MonoBehaviour
 {
     private Dictionary<ResourceType, int> _priceList;
     private Storage _storeStorage;
+
     [SerializeField] private Storage importStorage;
     [SerializeField] private ConvertInfo[] priceList;
+
     private void Awake()
     {
         Init();
     }
 
+    /// <summary>
+    /// Инициализация магазина
+    /// </summary>
     private void Init()
     {
         _storeStorage = GetComponent<Storage>();
@@ -38,6 +46,11 @@ public class Store : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// Продать ресурс
+    /// </summary>
+    /// <param name="type">Тип ресурса</param>
+    /// <param name="count">Количество ресурса</param>
     private void SellItem(ResourceType type, int count)
     {
         //Если регистрируется перемещение ресурса во внутреннее хранилище, ничего не делаем
