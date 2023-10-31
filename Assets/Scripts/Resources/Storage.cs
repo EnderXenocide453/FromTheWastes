@@ -106,8 +106,11 @@ public class Storage : MonoBehaviour
         sendCount = endless ? sendCount : (_resources[type].count > 0 ? Mathf.Clamp(sendCount, 1, _resources[type].count) : 0);
 
         //Если количество меньше 1, отправка невозможна
-        if (sendCount < 1)
+        if (sendCount < 1) {
+            other.onSendEnds?.Invoke(null);
+            onSendEnds?.Invoke(null);
             return 0;
+        }
 
         AnimateSend(other.transform, _resources[type]);
 

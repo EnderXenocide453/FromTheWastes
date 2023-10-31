@@ -21,6 +21,8 @@ public class GameLoader : MonoBehaviour
 
     void Awake()
     {
+        Time.timeScale = 1;
+
         SaveItemCollector.Loader = this;
         _saveInfo = new GlobalSaveObject();
 
@@ -55,6 +57,7 @@ public class GameLoader : MonoBehaviour
             _saveInfo = (GlobalSaveObject)bf.Deserialize(file);
 
             foreach (var item in _saveInfo.saveInfo) {
+                Debug.Log($"Загрузка {item.Value.prefabPath}");
                 SaveItem newItem = Instantiate(Resources.Load<GameObject>(item.Value.prefabPath)).GetComponent<SaveItem>();
                 newItem.SetLoadInfo(_saveInfo.saveInfo[item.Key]);
             }
